@@ -1,0 +1,23 @@
+; $Id$
+name = Business Goa
+description = Business Goa theme
+screenshot = images/screenshot.png
+core = 6.x
+engine = phptemplate
+stylesheets[all][text] = style.css
+
+regions[dashboard] = dashboard
+regions[footer] = footer
+regions[network_left] = network_left
+regions[network_right] = network_right
+regions[sidebar1_1] = sidebar1_1
+regions[sidebar1_2] = sidebar1_2
+regions[sidebar1_3] = sidebar1_3
+regions[col_left] = col_left
+regions[col_mid_left] = col_mid_left
+regions[col_right] = col_right
+regions[main_left] = main_left
+regions[about_business_goa] = about_business_goa
+regions[ad1] = ad1
+regions[ad2] = ad2
+regions[ad3] = ad3
