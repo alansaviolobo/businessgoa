@@ -40,18 +40,12 @@
 
 			<div id="navigation">				
 				<div id="main-nav">
-					<?php 
-						//if (isset($primary_links)) print primary_links(); 
-						print theme('links', $primary_links, array('class' => 'tabbed'));
-					?>
+					<?php print theme('links', $primary_links, array('class' => 'tabbed')); ?>
 					<div class="clearer">&nbsp;</div>
 				</div>
 
 				<div id="sub-nav">
-						<?php 
-							//if (isset($secondary_links)) print secondary_links(); 
-							print theme('links', $secondary_links, array('class' => 'tabbed'));
-						?>				
+						<?php print theme('links', $secondary_links, array('class' => 'tabbed')); ?>
 					<div class="clearer">&nbsp;</div>
 				</div>
 
@@ -69,7 +63,6 @@
 		      	print $main_left;
 		      	print $content; 
 		      ?>
-		      <? #php print $feed_icons; ?>  
         </div>      
         <div class="content-separator"></div>
 				<div class="col3 left">
