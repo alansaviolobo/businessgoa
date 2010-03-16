@@ -1,0 +1,6 @@
+; $Id$
+name = Crossword
+description = Allows creation and display of crossword puzzles.
+core = 6.x
+package = Games
+version = "$Name$"
