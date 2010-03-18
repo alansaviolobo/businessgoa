@@ -2,19 +2,42 @@
 
 function crossword_menu()
 {
-/*	$items['admin/settings/crossword/new'] = array(
-		'title' => 'Crossword settings',
-		'description' => 'Create a new crossword.',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('crossword_admin_settings'),
-		'access arguments' => array('administer site configuration'),
-		'type' => MENU_NORMAL_ITEM,
-		'file' => 'crossword.admin.inc',
+	$items = array();
+
+	$items['admin/crossword'] = array(
+		'title'				=> 'Crossword Settings',
+		'description'		=> 'Tweak settings and add new crosswords',
+		'position'			=> 'left',
+		'weight'			=> -5,
+		'page callback'		=> 'system_admin_menu_block_page',
+		'access arguments'	=> array('administer site configuration'),
+		'file'				=> 'system.admin.inc',
+		'file path' => drupal_get_path('module', 'system'),
 	);
-*/	
-	$items['crosswords/show/%'] = array(
+
+	$items['admin/crossword/add'] = array(
+		'title'				=> 'Add Crossword',
+		'description'		=> 'Add a new crossword',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('crossword_add_form'),
+		'access arguments'	=> array('administer site configuration'),
+		'type'				=> MENU_NORMAL_ITEM,
+		'file'				=> 'crossword.admin.inc',
+	);
+
+	$items['admin/crossword/addclue'] = array(
+		'title'				=> 'Add Crossword Clue',
+		'description'		=> 'Add a new crossword clue',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('crossword_clue_add_form'),
+		'access arguments'	=> array('administer site configuration'),
+		'type'				=> MENU_NORMAL_ITEM,
+		'file'				=> 'crossword.admin.inc',
+	);
+
+	$items['crosswords/%'] = array(
 		'page callback' => 'show_crossword',
-		'page arguments' => array(2),
+		'page arguments' => array(1),
 		'access callback' => TRUE,
 		'type' => MENU_CALLBACK,
 	);
@@ -24,7 +47,7 @@ function crossword_menu()
 
 function show_crossword($id = 0)
 {
-	$rel_path = '';
+	$rel_path = drupal_get_path('module', 'crossword');
 	$clues_config = null;
 	$crossword = db_fetch_object(db_query("SELECT * FROM {crosswords} WHERE id = %d", $id));
 	$clues = db_query("SELECT * FROM {crossword_clues} WHERE crossword_id = %d", $id);
@@ -50,15 +73,15 @@ function show_crossword($id = 0)
 		}";
 	
 	drupal_add_js($js, 'inline', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyPrologue.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyJsrAjax.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyClue.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyMenu.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyPuzzle.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyServer.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oySign.js', 'module', 'footer');
-	drupal_add_js(drupal_get_path('module', 'crossword').'/oy-cword-1.0/js/oyMisc.js', 'module', 'footer');
-	drupal_add_css(drupal_get_path('module', 'crossword').'/oy-cword-1.0/css/base.css', 'module');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyPrologue.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyJsrAjax.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyClue.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyMenu.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyPuzzle.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyServer.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oySign.js", 'module', 'footer');
+	drupal_add_js("$rel_path/oy-cword-1.0/js/oyMisc.js", 'module', 'footer');
+	drupal_add_css("$rel_path/oy-cword-1.0/css/base.css", 'module');
 	
 	return "<div id='oygContext' align='center' style='width:100%;'>
 		<table class='oyOuterFrame' border='0' cellpadding='0' cellspacing='0'>
