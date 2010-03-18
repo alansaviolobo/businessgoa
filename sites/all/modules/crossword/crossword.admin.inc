@@ -41,19 +41,23 @@ function crossword_add_form_validate($form, $form_state)
 {
 	preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_name']) or 
 		form_set_error('crossword_name', t('Please specify a valid name'));
-	preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_name']) or 
-		form_set_error('crossword_name', t('Please specify a valid name'));
-	preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_name']) or 
-		form_set_error('crossword_name', t('Please specify a valid name'));
-	preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_name']) or 
-		form_set_error('crossword_name', t('Please specify a valid name'));
-
+	preg_match('/^[a-zA-Z0-9]+$/', $form_state['values']['crossword_description']) or 
+		form_set_error('crossword_description', t('Please specify a valid description'));
+	preg_match('/^[0-9 ]+$/', $form_state['values']['crossword_width']) or 
+		form_set_error('crossword_width', t('Please specify a valid width'));
+	preg_match('/^[0-9 ]+$/', $form_state['values']['crossword_height']) or 
+		form_set_error('crossword_height', t('Please specify a valid height'));
 }
 
 function crossword_add_form_submit($form, $form_state)
 {
-var_dump($form_state);
-	//db_query("INSERT INTO {crosswords} VALUES (0, '%s', '%s', '%s')", 1, 2, 3);
+//var_dump($form_state);
+	db_query("INSERT INTO {crosswords} 
+						VALUES (0,'%s', '%s', '%d', '%d')",
+						$form_state['values']['crossword_name'], 
+						$form_state['values']['crossword_description'],
+						$form_state['values']['crossword_width'],
+						$form_state['values']['crossword_height']);
 	drupal_set_message(t('the crossword was successfully added'));
 }
 
@@ -69,14 +73,21 @@ function crossword_clue_add_form($form_state)
 	$form['crossword_clue_clue'] = array(
 		'#type' => 'textfield',
 		'#title' => t('Clue Description'),
-		'#description' => t('Enter a description for this crossword.'),
+		'#description' => t('Enter a description for this clue.'),
 	);
+	
+	$form['crossword_clue_answer'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Clue answer'),
+		'#description' => t('Enter an answer for this clue.'),
+	);
+
 
 	$form['crossword_clue_sign'] = array(
 		'#type' => 'radios',
 		'#title' => t('Direction'),
-		'#description' => t('Enter the direction of this crossword clue.'),
-		'#options' => array(t('Horizontal'), t('Vertical'))
+		'#description' => t('Enter the direction of this crossword clue. Default is horizontal'),
+		'#options' => array(t('Horizontal'), t('Vertical')),
 	);
 
 	$form['crossword_clue_xpos'] = array(
@@ -102,19 +113,29 @@ function crossword_clue_add_form($form_state)
 }
 
 function crossword_clue_add_form_validate($form, $form_state)
-{
-	empty($_FILES['files']['tmp_name']['datafile']) and 
-		form_set_error('datafile', t('Please specify a csv file to upload'));
-	$form_values['values']['table'] <> 'products' and $form_values['values']['table'] <> 'product_categories' and
-		form_set_error('datafile', t('form corrupted. please reload'));
+{	
+preg_match('/^[0-9 ]+$/', $form_state['values']['crossword_id']) or 
+form_set_error('crossword_id', t('Please specify a valid crossword id'));
+preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_clue_clue']) or 
+form_set_error('crossword_clue_clue', t('Please specify a clue'));
+preg_match('/^[a-zA-Z0-9 ]+$/', $form_state['values']['crossword_clue_answer']) or 
+form_set_error('crossword_clue_answer', t('Please specify a answer for the clue'));
+preg_match('/^[0-9 ]+$/', $form_state['values']['crossword_clue_xpos']) or 
+form_set_error('crossword_clue_xpos', t('Please specify a valid XPos'));
+preg_match('/^[0-9 ]+$/', $form_state['values']['crossword_clue_ypos']) or 
+form_set_error('crossword_clue_ypos', t('Please specify a valid YPos'));
 }
 
 function crossword_clue_add_form_submit($form, $form_state)
 {
-	$file = fopen($_FILES['files']['tmp_name']['datafile'], 'r');
-	list($count, $table) = array(0, $form_values['values']['table']);
-	while ($line = fgetcsv($file))
-		db_query("INSERT INTO {".$table."} VALUES ('" . implode("','", $line) . "')") and $count++;
-	fclose($file);
-	drupal_set_message(t( $count . ' new items were successfully added'));
+//var_dump($form_state);
+	db_query("INSERT INTO {crossword_clues} 
+						VALUES (0,'%d', '%s', '%s','%s', '%d','%d')",
+						$form_state['values']['crossword_id'], 
+						$form_state['values']['crossword_clue_clue'],
+						$form_state['values']['crossword_clue_answer'],
+						$form_state['values']['crossword_clue_sign'],
+						$form_state['values']['crossword_clue_xpos'],
+						$form_state['values']['crossword_clue_ypos']);
+	drupal_set_message(t('the clue was successfully added to the crossword'));
 }
