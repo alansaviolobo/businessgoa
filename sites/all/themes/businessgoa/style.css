@@ -542,7 +542,6 @@ img.alignright, img.right {margin: 0 0 1em 1.5em;}
 .form-text{
 margin-top:3px;
 height:20px;
-width:150px;
 vertical-align:bottom;
 font-size:12px;
 padding:5px 0 0 10px;
@@ -605,3 +604,24 @@ font-size:1em;
 font-weight:bold;
 padding-bottom: 10px;
 }
+
+.webform-client-form div #edit-submit{
+width:310px;
+background: url(images/btn-round.png) no-repeat left;
+padding: 1em 0 1em 5px;
+margin-right: 10px;
+cursor: pointer;
+}
+
+.webform-client-form div div label input{
+width:auto;
+}
+
+html.js .resizable-textarea textarea{
+width:auto;
+}
+
+#tellafriend-page div div input{
+width:300px;
+}
+
