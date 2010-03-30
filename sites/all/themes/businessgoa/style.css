@@ -426,7 +426,7 @@ img.alignright, img.right {margin: 0 0 1em 1.5em;}
 background: #DDEDF7; 
 position: relative;
 overflow: hidden;
-width:900px;
+width:980px;
 }
 
 #sub-nav a {
@@ -449,7 +449,7 @@ position:absolute;
 height:20px;	width:20px;
 float:left;
 background-image:url(images/right_blue_arrow.png);
-top:340px; left:1109px;
+top:340px; left:1189px;
 z-index:10000012; 
 }
 
