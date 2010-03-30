@@ -113,10 +113,18 @@ dd {margin-left: 1.5em;}
 ul.plain-list li, ul.nice-list li, ul.tabbed li {list-style: none;}
 
 ul.tabbed {
-	display: inline;
+	display: block;
+	padding: 0 0 0 10px;
+	width:3300px;
+	list-style: none;
 	margin: 0;
 }
-ul.tabbed li {float: left;}
+.tabbed li {
+  display: block;
+  float: left;
+  padding: 0 4px;
+}
+
 
 ul.plain-list {margin: 0;}
 
@@ -414,7 +422,13 @@ img.alignright, img.right {margin: 0 0 1em 1.5em;}
 
 /* Subnav */
 
-#sub-nav {background: #DDEDF7; padding: 0 5px;}
+#sub-nav {
+background: #DDEDF7; 
+position: relative;
+overflow: hidden;
+width:900px;
+}
+
 #sub-nav a {
 	color: #678;
 	font: bold 1.2em sans-serif;
@@ -422,7 +436,27 @@ img.alignright, img.right {margin: 0 0 1em 1.5em;}
 }
 #sub-nav li.active a, #sub-nav a:hover {color: #223;}
 
+.scroll-left{
+position:absolute;
+height:20px;	width:20px;
+float:left;
+background-image:url(images/left_blue_arrow.png);
+top:340px; left:212px;
+z-index:10000012; 
+}
+.scroll-right{
+position:absolute;
+height:20px;	width:20px;
+float:left;
+background-image:url(images/right_blue_arrow.png);
+top:340px; left:1109px;
+z-index:10000012; 
+}
 
+.inline
+{
+height:40px;
+}
 /* Main */
 
 .main {margin-bottom: 18px;}

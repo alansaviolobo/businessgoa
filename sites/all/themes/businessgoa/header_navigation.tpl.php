@@ -47,13 +47,46 @@
 					<div class="clearer">&nbsp;</div>
 				</div>
 
-				<div id="sub-nav">
-						<?php 
-							//if (isset($secondary_links)) print secondary_links(); 
-							print theme('links', $secondary_links, array('class' => 'tabbed'));
-						?>				
-					<div class="clearer">&nbsp;</div>
-				</div>
+				<div class="inline">
+					<div class="scroll-left"></div>
+					<div id="sub-nav">				
+									<?php 
+										//if (isset($secondary_links)) print secondary_links(); 
+										print theme('links', $secondary_links, array('class' => 'tabbed'));
+									?>				
+					</div>
+					<div class="scroll-right"></div>	
+			</div>
+				<script type="text/javascript">
+					<!--
+					$(function(){
+					//Get our elements for faster access and set overlay width
+					var div = $('#sub-nav'),
+								       ul = $('ul.tabbed'),
+								       // unordered list's left margin
+								       ulPadding = 2650;
 
+					//Get menu width
+					var divWidth = div.width();
+
+					//Remove scrollbars
+					div.css({overflow: 'hidden'});
+
+					//Find last image container
+					var lastLi = ul.find('li:last-child');
+
+					//When user move mouse over menu
+					div.mousemove(function(e){
+
+						//As images are loaded ul width increases,
+						//so we recalculate it each time
+						var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + ulPadding;
+
+						var left = (e.pageX - div.offset().left) * (ulWidth-divWidth) / divWidth;
+						div.scrollLeft(left);
+					});
+				});
+				-->
+				</script>
 			</div>
 		</div>
