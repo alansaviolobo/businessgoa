@@ -1,0 +1,12 @@
+<?php
+// $Id: frameprevention.install,v 1.2 2008/07/21 16:01:30 deekayen Exp $
+
+/**
+ * Implementation of hook_uninstall().
+ *
+ * Clean up configuration variables.
+ */
+function frameprevention_uninstall() {
+  variable_del('frameprevention_enabled');
+  variable_del('frameprevention_pages');
+}

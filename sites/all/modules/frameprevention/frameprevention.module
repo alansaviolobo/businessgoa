@@ -1,0 +1,94 @@
+<?php
+// $Id: frameprevention.module,v 1.7 2008/07/21 16:01:30 deekayen Exp $
+
+/**
+ * @file
+ *
+ * Prevent your Drupal site from being framed.
+ * For Drupal version 6.x.
+ *
+ * @author Ralf Dorfner
+ * @author David Kent Norman
+ */
+
+/**
+ * Implementation of hook_perm().
+ *
+ * Valid permissions for the frameprevention module.
+ *
+ * @return array
+ */
+function frameprevention_perm() {
+  return array('administer frameprevention');
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function frameprevention_init() {
+  if (variable_get('frameprevention_enabled', 0)) {
+    if (!frameprevention_check()) {
+      $data =  "\n<script type=\"text/javascript\">\n";
+      $data .= " /* <![CDATA[ */\n if(top.frames.length > 0) top.location.href=self.location;\n /* ]]> */\n";
+      $data .= "</script>\n";
+
+      drupal_set_html_head($data);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ *
+ * @return array
+ */
+function frameprevention_menu() {
+  $items = array();
+
+  $items['admin/settings/frameprevention'] = array(
+    'title' => 'Frameprevention',
+    'description' => 'Prevent your site from being framed.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('frameprevention_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer frameprevention'),
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+function frameprevention_admin_settings() {
+  $form = array();
+
+  $form['fp'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Prevent your site from being framed'),
+    '#tree' => FALSE
+  );
+  $form['fp']['frameprevention_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Frameprevention'),
+    '#default_value' => variable_get('frameprevention_enabled', 0)
+  );
+  $form['fp']['frameprevention_pages'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Pages'),
+    '#default_value' => variable_get('frameprevention_pages', 'img_assist/*'),
+    '#cols' => 30,
+    '#rows' => 5,
+    '#description' => t('List of pages the module is <b>disabled</b>. Use the <em>*</em> character for wildcard, each entry in a new line.')
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * @return integer
+ */
+function frameprevention_check() {
+  $pages = variable_get('frameprevention_pages', 'img_assist/*');
+  $path = drupal_get_path_alias($_GET['q']);
+  $regexp = '/^('. preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1'. variable_get('site_frontpage', 'node') .'\2'), preg_quote($pages, '/')) .')$/';
+  return preg_match($regexp, $path);
+}

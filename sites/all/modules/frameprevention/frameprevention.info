@@ -1,0 +1,10 @@
+; $Id: frameprevention.info,v 1.2 2008/07/21 16:01:30 deekayen Exp $
+name = Frameprevention
+description = "Prevents your site from being framed by another one."
+core = 6.x
+; Information added by drupal.org packaging script on 2008-07-21
+version = "6.x-1.0"
+core = "6.x"
+project = "frameprevention"
+datestamp = "1216656614"
+
