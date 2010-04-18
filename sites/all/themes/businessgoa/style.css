@@ -423,10 +423,10 @@ img.alignright, img.right {margin: 0 0 1em 1.5em;}
 /* Subnav */
 
 #sub-nav {
-background: #DDEDF7; 
-position: relative;
-overflow: hidden;
-width:980px;
+	position: relative;
+	overflow: hidden;
+	width:930px;
+	margin-left: 25px;
 }
 
 #sub-nav a {
@@ -453,8 +453,9 @@ z-index:10000012;
 
 .inline
 {
-	height:40px;
+	height:36px;
 	position: relative;
+	background: #DDEDF7; 
 }
 /* Main */
 
