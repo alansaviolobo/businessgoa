@@ -60,32 +60,41 @@
 				<script type="text/javascript">
 					<!--
 					$(function(){
-					//Get our elements for faster access and set overlay width
-					var div = $('#sub-nav'),
-								       ul = $('ul.tabbed'),
-								       // unordered list's left margin
-								       ulPadding = 2650;
+						var div = $('#sub-nav');
+						
+						var current = 0;
+						var step = 2;
+						var visible = 2;
+						var maximum = $('#sub-nav ul').outerWidth();
+						var liWidth = $('#sub-nav ul li').outerWidth();
+						var carouselHeight = $('#sub-nav').outerHeight();
+						var speed = 200;
 
-					//Get menu width
-					var divWidth = div.width();
+						div.css({overflow: 'hidden'});
+						
+						$('#sub-nav ul').css("position", "absolute");
+	 
+						$('#sub-nav').css("overflow", "hidden").css("position", "relative").css('height',carouselHeight+"px");
+						
+						$('.inline .scroll-right').click(function() { 
+							if(current + step < 0 || current + step > maximum - visible) {return; }
+							else {
+								current = current + step;
+								$('#sub-nav ul').animate({left: -(liWidth * current)}, speed, null);
+							}
+							return false;
+						});
+				 
+						$('.inline .scroll-left').click(function() { 
+							if(current - step < 0 || current - step > maximum - visible) {return; }
+							else {
+								current = current - step;
+								$('#sub-nav ul').animate({left: -(liWidth * current)}, speed, null);
+							}
+							return false;
+						});					
 
-					//Remove scrollbars
-					div.css({overflow: 'hidden'});
-
-					//Find last image container
-					var lastLi = ul.find('li:last-child');
-
-					//When user move mouse over menu
-					div.mousemove(function(e){
-
-						//As images are loaded ul width increases,
-						//so we recalculate it each time
-						var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + ulPadding;
-
-						var left = (e.pageX - div.offset().left) * (ulWidth-divWidth) / divWidth;
-						div.scrollLeft(left);
 					});
-				});
 				-->
 				</script>
 			</div>
