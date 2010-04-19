@@ -115,7 +115,6 @@ ul.plain-list li, ul.nice-list li, ul.tabbed li {list-style: none;}
 ul.tabbed {
 	display: block;
 	padding: 0 0 0 10px;
-	width:3300px;
 	list-style: none;
 	margin: 0;
 }
