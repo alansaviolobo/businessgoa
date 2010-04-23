@@ -74,7 +74,7 @@
 						
 						$('#sub-nav ul').css("position", "absolute");
 	 
-						$('#sub-nav').css("overflow", "hidden").css("position", "relative").css('height',carouselHeight+"px");
+						$('#sub-nav').css("overflow", "hidden").css("position", "relative").css('height',"36px");
 						
 						$('.inline .scroll-right').click(function() { 
 							if(current + step < 0 || current + step > maximum - visible) {return; }
