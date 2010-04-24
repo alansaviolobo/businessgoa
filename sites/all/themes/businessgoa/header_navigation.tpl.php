@@ -64,11 +64,11 @@
 						
 						var current = 0;
 						var step = 2;
-						var visible = 2;
-						var maximum = $('#sub-nav ul').outerWidth();
+						var maximum = $('#sub-nav ul li').length ;
 						var liWidth = $('#sub-nav ul li').outerWidth();
 						var carouselHeight = $('#sub-nav').outerHeight();
 						var speed = 200;
+						var visible = $('#sub-nav').outerWidth()/$('#sub-nav ul li').outerWidth();						
 
 						div.css({overflow: 'hidden'});
 						
@@ -77,7 +77,7 @@
 						$('#sub-nav').css("overflow", "hidden").css("position", "relative").css('height',"36px");
 						
 						$('.inline .scroll-right').click(function() { 
-							if(current + step < 0 || current + step > maximum - visible) {return; }
+							if(current + step < 0 || current - step > maximum - visible) {return; }
 							else {
 								current = current + step;
 								$('#sub-nav ul').animate({left: -(liWidth * current)}, speed, null);
@@ -86,7 +86,7 @@
 						});
 				 
 						$('.inline .scroll-left').click(function() { 
-							if(current - step < 0 || current - step > maximum - visible) {return; }
+							if(current - step < 0 ) {return; }
 							else {
 								current = current - step;
 								$('#sub-nav ul').animate({left: -(liWidth * current)}, speed, null);
