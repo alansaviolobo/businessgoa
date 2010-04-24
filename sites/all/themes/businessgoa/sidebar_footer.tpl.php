@@ -21,7 +21,7 @@
 		<div class="clearer">&nbsp;</div>
 	</div>
 
-	<div id="dashboard">
+	<div id="dashboard" class="left">
 		<div class="column left" id="column-1">
 			<?php print $about_business_goa;?> 	
 			</div>
@@ -62,7 +62,7 @@
 		<div class="clearer">&nbsp;</div>
 	</div>
 	
-	<div id="footer">
+	<div id="footer" class="left">
 		<div class="left">&copy; <?= date("Y")?> Business Goa</div>
 		<div class="right">Designed & Maintained by <a href="http://www.technotrix.co.in"> Technotrix</a></div>
 		<div class="clearer">&nbsp;</div>
