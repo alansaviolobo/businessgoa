@@ -70,7 +70,7 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [2] ['status'] = true;
 
 			$blocks [3] ['info'] = t ( 'Goan Brand' );
-			$blocks [3] ['title'] = 'Editorial';
+			$blocks [3] ['title'] = 'Goan Brand';
 			$blocks [3] ['pages'] = '<front>';
 			$blocks [3] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [3] ['region'] = 'side_upper_region';

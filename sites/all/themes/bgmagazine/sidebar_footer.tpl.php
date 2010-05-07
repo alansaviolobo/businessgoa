@@ -1,4 +1,4 @@
-	<div class="right sidebar" id="sidebar-2">
+		<div class="right sidebar" id="sidebar-2">
 			<div class="section">
 				<div class="section-content">
 				<?= $ad_upper_region; ?>
