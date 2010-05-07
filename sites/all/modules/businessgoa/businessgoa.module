@@ -1,0 +1,131 @@
+<?php
+
+function businessgoa_menu() {
+
+	$common = array ('menu_name' => 'primary-links', 'page callback' => 'show_bg_section', 'page arguments' => array (1 ) );
+
+	$items ['home'] = array ('page callback' => 'bg_home', 'access callback' => TRUE );
+	$items ['bon-appetit'] = $common;
+	$items ['book-shelf'] = $common;
+	$items ['cover-story'] = $common;
+	$items ['editorial'] = $common;
+	$items ['family-business'] = $common;
+	$items ['goan-brand'] = $common;
+	$items ['green-goa'] = $common;
+	$items ['in-focus'] = $common;
+	$items ['interview'] = $common;
+	$items ['legal-eagle'] = $common;
+	$items ['letters-to-the-editor'] = $common;
+	$items ['love-for-business'] = $common;
+	$items ['money-and-markets'] = $common;
+	$items ['news'] = $common;
+	$items ['newsmakers'] = $common;
+	$items ['professional-dossier'] = $common;
+	$items ['starting-young'] = $common;
+	$items ['thinking-hat'] = $common;
+	$items ['uncommon-wealth'] = $common;
+
+	return $items;
+}
+
+function get_latest_page_from_section($section) {
+
+	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
+	$month = time () + 60 * 60 * 24 * 30;
+	do {
+		$month -= 60 * 60 * 24 * 30;
+		$month_id = @current ( taxonomy_get_term_by_name ( date ( 'F Y', $month ) ) )->tid;
+		if (! $month_id)
+			continue;
+		$articles = taxonomy_select_nodes ( array ($section_id, $month_id ), 'and' );
+	} while ( is_null ( $articles ) or mysqli_num_rows ( $articles ) == 0 );
+	return node_load ( mysqli_fetch_object ( $articles )->nid );
+}
+
+function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
+	switch ($op) {
+		case 'list' :
+			$blocks [0] ['info'] = t ( 'Editorial' );
+			$blocks [0] ['title'] = 'Editorial';
+			$blocks [0] ['pages'] = '<front>';
+			$blocks [0] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [0] ['region'] = 'bottom_left_region';
+			$blocks [0] ['custom'] = true;
+			$blocks [0] ['status'] = true;
+
+			$blocks [1] ['info'] = t ( 'In Focus' );
+			$blocks [1] ['title'] = 'In Focus';
+			$blocks [1] ['pages'] = '<front>';
+			$blocks [1] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [1] ['region'] = 'bottom_mid_region';
+			$blocks [1] ['custom'] = true;
+			$blocks [1] ['status'] = true;
+
+			$blocks [2] ['info'] = t ( 'Starting Young' );
+			$blocks [2] ['title'] = 'Starting Young';
+			$blocks [2] ['pages'] = '<front>';
+			$blocks [2] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [2] ['region'] = 'bottom_right_region';
+			$blocks [2] ['custom'] = true;
+			$blocks [2] ['status'] = true;
+
+			$blocks [3] ['info'] = t ( 'Goan Brand' );
+			$blocks [3] ['title'] = 'Editorial';
+			$blocks [3] ['pages'] = '<front>';
+			$blocks [3] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [3] ['region'] = 'side_upper_region';
+			$blocks [3] ['custom'] = true;
+			$blocks [3] ['status'] = true;
+
+			$blocks [4] ['info'] = t ( 'Interview' );
+			$blocks [4] ['title'] = 'Interview';
+			$blocks [4] ['pages'] = '<front>';
+			$blocks [4] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [4] ['region'] = 'side_mid_region';
+			$blocks [4] ['custom'] = true;
+			$blocks [4] ['status'] = true;
+
+			$blocks [5] ['info'] = t ( 'Bon Appetit' );
+			$blocks [5] ['title'] = 'Bon Appetit';
+			$blocks [5] ['pages'] = '<front>';
+			$blocks [5] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [5] ['region'] = 'side_lower_region';
+			$blocks [5] ['custom'] = true;
+			$blocks [5] ['status'] = true;
+
+			return $blocks;
+		case 'view' :
+			switch ($delta) {
+				case 0 :
+					$block ['subject'] = t ( 'Editorial' );
+					$block ['content'] = get_latest_page_from_section ( 'Editorial' )->teaser;
+					break;
+				case 1 :
+					$block ['subject'] = t ( 'In Focus' );
+					$block ['content'] = get_latest_page_from_section ( 'In Focus' )->teaser;
+					break;
+				case 2 :
+					$block ['subject'] = t ( 'Starting Young' );
+					$block ['content'] = get_latest_page_from_section ( 'Starting Young' )->teaser;
+					break;
+				case 3 :
+					$block ['subject'] = t ( 'Goan Brand' );
+					$block ['content'] = get_latest_page_from_section ( 'Goan Brand' )->teaser;
+					break;
+				case 4 :
+					$block ['subject'] = t ( 'Interview' );
+					$block ['content'] = get_latest_page_from_section ( 'Interview' )->teaser;
+					break;
+				case 5 :
+					$block ['subject'] = t ( 'Bon Appetit' );
+					$block ['content'] = get_latest_page_from_section ( 'Bon Appetit' )->teaser;
+					break;
+			}
+			return $block;
+	}
+	return $op->content;
+}
+
+function bg_home() {
+	return get_latest_page_from_section ( 'Cover Story' )->teaser;
+}

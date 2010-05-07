@@ -1,0 +1,4 @@
+name = Business Goa
+description = Functionality related to the business goa magazine.
+package = "Magazine"
+core = 6.x
