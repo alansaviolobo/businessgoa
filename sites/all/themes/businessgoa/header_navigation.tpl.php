@@ -2,25 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml">
 
 <head>
-  <?php print $head ?>
-  <title><?php print $head_title ?></title>
-  <?php print $styles ?>
-  <?php print $scripts ?>
+  <?= $head ?>
+  <title><?= $head_title ?></title>
+  <?= $styles ?>
+  <?= $scripts ?>
 </head>
-
 <body id="top">
-
 <div id="network">
 	<div class="center-wrapper">
 		<div class="left">
 			<ul class="tabbed" id="network-tabs">
-				<li class="current-tab"><a href="#">Business Goa</a></li>
+				<li class="current-tab"><a href="<?= base_path(); ?>">Business Goa</a></li>
 				<li><a href="#">Savoir Faire</a></li>
 				<li><a href="#">My Goa</a></li>
 			</ul>
 		</div>
 		<div class="right">
-		<?php print $network_right; ?>
+		<?= $network_right; ?>
 			<div class="clearer">&nbsp;</div>
 		</div>
 		<div class="clearer">&nbsp;</div>
@@ -35,25 +33,19 @@
 			</div>
 			<div class="clearer">&nbsp;</div>
 			<div id="site-title">
-				<h1><a href="/"><img src='<?php print $logo?>'></a></h1>
+				<h1><a href="<?= base_path(); ?>"><img src='<?= $logo; ?>'></a></h1>
 			</div>
 
 			<div id="navigation">
 				<div id="main-nav">
-					<?php
-						//if (isset($primary_links)) print primary_links();
-						print theme('links', $primary_links, array('class' => 'tabbed'));
-					?>
+					<?= theme('links', $primary_links, array('class' => 'tabbed')); ?>
 					<div class="clearer">&nbsp;</div>
 				</div>
 
 				<div class="inline">
 					<div class="scroll-left"></div>
 					<div id="sub-nav">
-									<?php
-										//if (isset($secondary_links)) print secondary_links();
-										print theme('links', $secondary_links, array('class' => 'tabbed'));
-									?>
+						<?= theme('links', $secondary_links, array('class' => 'tabbed')); ?>
 					</div>
 					<div class="scroll-right"></div>
 			</div>
