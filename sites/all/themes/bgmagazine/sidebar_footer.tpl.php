@@ -29,7 +29,7 @@
 			<div class="column-content">
 			<div class="column-title">Follow Us</div>
 			<ul class="plain-list">
-				<li><a class="footer-links" href="#"><img class="footer-facebook" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Facebook</a></li>
+				<li><a class="footer-links" href="http://www.facebook.com/pages/Business-Goa/121764281183650"><img class="footer-facebook" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Facebook</a></li>
 				<li><a class="footer-links" href="#"><img class="footer-orkut" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Orkut</a></li>
 				<li><a class="footer-links" href="#"><img class="footer-twitter" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Twitter</a></li>
 				<li><a class="footer-links" href="#"><img class="footer-rss" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  RSS</a></li>
@@ -63,13 +63,25 @@
 
 	<div id="footer" class="left">
 		<div class="left">&copy; <?= date("Y")?> Business Goa</div>
-		<div class="right">Designed & Maintained by <a href="http://www.technotrix.co.in"> Technotrix</a></div>
+		<div class="right">Designed & Maintained by <a href="http://www.technotrix.co.in">Technotrix</a></div>
 		<div class="clearer">&nbsp;</div>
 	</div>
 
 	</div>
 </div>
 <?= $closure; ?>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({appId: 'your app id', status: true, cookie: true,
+             xfbml: true});
+  };
+  (function() {
+    var e = document.createElement('script'); e.async = true;
+    e.src = document.location.protocol +
+      '//connect.facebook.net/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+  }());
+</script>
 </body>
 </html>
-

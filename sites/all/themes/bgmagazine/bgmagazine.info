@@ -5,6 +5,7 @@ core = 6.x
 engine = phptemplate
 stylesheets[all][text] = style.css
 
+regions[below_content_region]= Below Content Region
 regions[side_upper_region]   = Side Upper Region
 regions[side_mid_region]     = Side Mid Region
 regions[side_lower_region]   = Side Lower Region

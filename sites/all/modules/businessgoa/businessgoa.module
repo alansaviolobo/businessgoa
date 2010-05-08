@@ -93,32 +93,62 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [5] ['custom'] = true;
 			$blocks [5] ['status'] = true;
 
+			$blocks [6] ['info'] = t ( 'Facebook Fans' );
+			$blocks [6] ['title'] = 'Facebook Fans';
+			$blocks [6] ['pages'] = '<front>';
+			$blocks [6] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [6] ['region'] = 'side_upper_region';
+			$blocks [6] ['custom'] = true;
+			$blocks [6] ['status'] = true;
+
+			$blocks [7] ['info'] = t ( 'Facebook Comments' );
+			$blocks [7] ['title'] = 'Facebook Comments';
+			$blocks [7] ['pages'] = '<front>';
+			$blocks [7] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [7] ['region'] = 'below_content_region';
+			$blocks [7] ['custom'] = true;
+			$blocks [7] ['status'] = true;
+
 			return $blocks;
 		case 'view' :
 			switch ($delta) {
 				case 0 :
-					$block ['subject'] = t ( 'Editorial' );
-					$block ['content'] = get_latest_page_from_section ( 'Editorial' )->teaser;
+					$content = get_latest_page_from_section ( 'Editorial' );
+					$block ['subject'] = l ( t ( 'Editorial' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 1 :
-					$block ['subject'] = t ( 'In Focus' );
-					$block ['content'] = get_latest_page_from_section ( 'In Focus' )->teaser;
+					$content = get_latest_page_from_section ( 'In Focus' );
+					$block ['subject'] = l ( t ( 'In Focus' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 2 :
-					$block ['subject'] = t ( 'Starting Young' );
-					$block ['content'] = get_latest_page_from_section ( 'Starting Young' )->teaser;
+					$content = get_latest_page_from_section ( 'Starting Young' );
+					$block ['subject'] = l ( t ( 'Starting Young' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 3 :
-					$block ['subject'] = t ( 'Goan Brand' );
-					$block ['content'] = get_latest_page_from_section ( 'Goan Brand' )->teaser;
+					$content = get_latest_page_from_section ( 'Goan Brand' );
+					$block ['subject'] = l ( t ( 'Goan Brand' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 4 :
-					$block ['subject'] = t ( 'Interview' );
-					$block ['content'] = get_latest_page_from_section ( 'Interview' )->teaser;
+					$content = get_latest_page_from_section ( 'Interview' );
+					$block ['subject'] = l ( t ( 'Interview' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 5 :
-					$block ['subject'] = t ( 'Bon Appetit' );
-					$block ['content'] = get_latest_page_from_section ( 'Bon Appetit' )->teaser;
+					$content = get_latest_page_from_section ( 'Bon Appetit' );
+					$block ['subject'] = l ( t ( 'Bon Appetit' ), $content->path );
+					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
+					break;
+				case 6 :
+					$block ['subject'] = 'Facebook Like';
+					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='170' stream='false' header='false'></fb:like-box>";
+					break;
+				case 7 :
+					$block ['subject'] = 'Facebook Comments';
+					$block ['content'] = "<fb:comments></fb:comments>";
 					break;
 			}
 			return $block;
