@@ -31,7 +31,7 @@
 			<ul class="plain-list">
 				<li><a class="footer-links" href="http://www.facebook.com/pages/Business-Goa/121764281183650"><img class="footer-facebook" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Facebook</a></li>
 				<li><a class="footer-links" href="#"><img class="footer-orkut" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Orkut</a></li>
-				<li><a class="footer-links" href="#"><img class="footer-twitter" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Twitter</a></li>
+				<li><a class="footer-links" href=" http://twitter.com/businessgoa"><img class="footer-twitter" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  Twitter</a></li>
 				<li><a class="footer-links" href="#"><img class="footer-rss" src="<?=base_path().path_to_theme()?>/images/img_trans.gif" />  RSS</a></li>
 			</ul>
 			</div>

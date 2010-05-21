@@ -38,8 +38,10 @@ function get_latest_page_from_section($section) {
 		if (! $month_id)
 			continue;
 		$articles = taxonomy_select_nodes ( array ($section_id, $month_id ), 'and' );
-	} while ( is_null ( $articles ) or mysqli_num_rows ( $articles ) == 0 );
-	return node_load ( mysqli_fetch_object ( $articles )->nid );
+		$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_num_rows' : 'mysql_num_rows';
+	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 );
+	$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
+	return node_load ( call_user_func ( $test_fn, $articles )->nid );
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
@@ -109,6 +111,22 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [7] ['custom'] = true;
 			$blocks [7] ['status'] = true;
 
+			$blocks [8] ['info'] = t ( 'Previous Articles' );
+			$blocks [8] ['title'] = 'Previous Articles';
+			$blocks [8] ['pages'] = '<front>';
+			$blocks [8] ['cache'] = BLOCK_CACHE_PER_PAGE;
+			$blocks [8] ['region'] = 'side_mid_region';
+			$blocks [8] ['custom'] = false;
+			$blocks [8] ['status'] = true;
+
+			$blocks [9] ['info'] = t ( 'Other Articles' );
+			$blocks [9] ['title'] = 'Other Articles';
+			$blocks [9] ['pages'] = '<front>';
+			$blocks [9] ['cache'] = BLOCK_CACHE_PER_PAGE;
+			$blocks [9] ['region'] = 'side_lower_region';
+			$blocks [9] ['custom'] = false;
+			$blocks [9] ['status'] = true;
+
 			return $blocks;
 		case 'view' :
 			switch ($delta) {
@@ -149,6 +167,38 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 				case 7 :
 					$block ['subject'] = 'Facebook Comments';
 					$block ['content'] = "<fb:comments></fb:comments>";
+					break;
+				case 8 :
+					foreach ( taxonomy_get_vocabularies () as $vocab )
+						if ($vocab->name == 'Article')
+							$vid = $vocab->vid;
+					foreach ( node_load ( next ( explode ( '/', $_GET ['q'] ) ) )->taxonomy as $term )
+						if ($term->vid == $vid)
+							$tid = $term->tid;
+					$nodes = taxonomy_select_nodes ( array ($tid ) );
+					$html = null;
+					while ( $node = mysqli_fetch_object ( $nodes ) )
+						$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+					$html = "<ul>$html</ul>";
+
+					$block ['subject'] = 'Previous Articles';
+					$block ['content'] = $html;
+					break;
+				case 9 :
+					foreach ( taxonomy_get_vocabularies () as $vocab )
+						if ($vocab->name == 'Issue')
+							$vid = $vocab->vid;
+					foreach ( node_load ( next ( explode ( '/', $_GET ['q'] ) ) )->taxonomy as $term )
+						if ($term->vid == $vid)
+							$tid = $term->tid;
+					$nodes = taxonomy_select_nodes ( array ($tid ) );
+					$html = null;
+					while ( $node = mysqli_fetch_object ( $nodes ) )
+						$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+					$html = "<ul>$html</ul>";
+
+					$block ['subject'] = 'Other Articles';
+					$block ['content'] = $html;
 					break;
 			}
 			return $block;
