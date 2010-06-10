@@ -13,6 +13,10 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acron
 	vertical-align: baseline;
 }
 
+span, p {
+	text-align: justify;
+}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -748,14 +752,16 @@ img.alignright,img.right {
 	margin-bottom: 18px;
 }
 
+#main-three-columns.main {
+	background:url("images/main-three-columns.gif") repeat-y scroll right top transparent;
+}
+
 .main#main-three-columns .sidebar {
-	border-left: 1px solid #D5D5D5;
-	padding-left: 36px;
 	width: 193px;
 }
 
 .main#main-three-columns #main-left {
-	width: 699px;
+	width: 520px;
 }
 
 .main#main-two-columns {
