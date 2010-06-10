@@ -2,36 +2,36 @@
 
 function businessgoa_menu() {
 
-	$common = array ('menu_name' => 'primary-links', 'page callback' => 'show_bg_section', 'page arguments' => array (1 ) );
+	$common = array ('page callback' => 'bg_section', 'page arguments' => array (1 ) );
 
 	$items ['home'] = array ('page callback' => 'bg_home', 'access callback' => TRUE );
-	$items ['bon-appetit'] = $common;
-	$items ['book-shelf'] = $common;
-	$items ['cover-story'] = $common;
-	$items ['editorial'] = $common;
-	$items ['family-business'] = $common;
-	$items ['goan-brand'] = $common;
-	$items ['green-goa'] = $common;
-	$items ['in-focus'] = $common;
-	$items ['interview'] = $common;
-	$items ['legal-eagle'] = $common;
-	$items ['letters-to-the-editor'] = $common;
-	$items ['love-for-business'] = $common;
-	$items ['money-and-markets'] = $common;
-	$items ['news'] = $common;
-	$items ['newsmakers'] = $common;
-	$items ['professional-dossier'] = $common;
-	$items ['starting-young'] = $common;
-	$items ['thinking-hat'] = $common;
-	$items ['uncommon-wealth'] = $common;
+	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
+	$items ['Bon-Appetit'] = $common;
+	$items ['Book-Shelf'] = $common;
+	$items ['Cover-Story'] = $common;
+	$items ['Editorial'] = $common;
+	$items ['Family-Business'] = $common;
+	$items ['Goan-Brand'] = $common;
+	$items ['Green-Goa'] = $common;
+	$items ['In-Focus'] = $common;
+	$items ['Interview'] = $common;
+	$items ['Legal-Eagle'] = $common;
+	$items ['Letters-To-The-Editor'] = $common;
+	$items ['Love-For-Business'] = $common;
+	$items ['Money-And-Markets'] = $common;
+	$items ['News'] = $common;
+	$items ['Newsmakers'] = $common;
+	$items ['Professional-Dossier'] = $common;
+	$items ['Starting-Young'] = $common;
+	$items ['Thinking-Hat'] = $common;
+	$items ['Uncommon-Wealth'] = $common;
 
 	return $items;
 }
 
-function get_latest_page_from_section($section) {
-
+function bg_get_article($section, $month = null) {
 	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
-	$month = time () + 60 * 60 * 24 * 30;
+	$month = (is_null ( $month ) ? time () : $month) + 60 * 60 * 24 * 30;
 	do {
 		$month -= 60 * 60 * 24 * 30;
 		$month_id = @current ( taxonomy_get_term_by_name ( date ( 'F Y', $month ) ) )->tid;
@@ -42,6 +42,7 @@ function get_latest_page_from_section($section) {
 	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 );
 	$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
 	return node_load ( call_user_func ( $test_fn, $articles )->nid );
+	return ( object ) array ('teaser' => 'test' );
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
@@ -131,42 +132,42 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 		case 'view' :
 			switch ($delta) {
 				case 0 :
-					$content = get_latest_page_from_section ( 'Editorial' );
+					$content = bg_get_article ( 'Editorial' );
 					$block ['subject'] = l ( t ( 'Editorial' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 1 :
-					$content = get_latest_page_from_section ( 'In Focus' );
+					$content = bg_get_article ( 'In Focus' );
 					$block ['subject'] = l ( t ( 'In Focus' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 2 :
-					$content = get_latest_page_from_section ( 'Starting Young' );
+					$content = bg_get_article ( 'Starting Young' );
 					$block ['subject'] = l ( t ( 'Starting Young' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 3 :
-					$content = get_latest_page_from_section ( 'Goan Brand' );
+					$content = bg_get_article ( 'Goan Brand' );
 					$block ['subject'] = l ( t ( 'Goan Brand' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 4 :
-					$content = get_latest_page_from_section ( 'Interview' );
+					$content = bg_get_article ( 'Interview' );
 					$block ['subject'] = l ( t ( 'Interview' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 5 :
-					$content = get_latest_page_from_section ( 'Bon Appetit' );
+					$content = bg_get_article ( 'Bon Appetit' );
 					$block ['subject'] = l ( t ( 'Bon Appetit' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 6 :
 					$block ['subject'] = 'Facebook Like';
-					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='170' stream='false' header='false'></fb:like-box>";
+					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='192' stream='false' header='false'></fb:like-box>";
 					break;
 				case 7 :
 					$block ['subject'] = 'Facebook Comments';
-					$block ['content'] = "<fb:comments></fb:comments>";
+					$block ['content'] = "<fb:comments width='522'></fb:comments>";
 					break;
 				case 8 :
 					foreach ( taxonomy_get_vocabularies () as $vocab )
@@ -207,5 +208,15 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 }
 
 function bg_home() {
-	return get_latest_page_from_section ( 'Cover Story' )->teaser;
+	return bg_get_article ( 'Cover Story' )->teaser;
+}
+
+function bg_section($section) {
+	$section = str_replace ( '-', ' ', $section );
+	drupal_goto ( bg_get_article ( $section )->path );
+}
+
+function bg_archives($issue) {
+	$issue = strtotime ( $issue );
+	return bg_get_article ( 'Cover Story', $issue )->body;
 }
