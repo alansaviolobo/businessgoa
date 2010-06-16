@@ -23,7 +23,11 @@
 
 	<div id="dashboard" class="left">
 		<div class="column left" id="column-1">
-			Goan flavoured magazine for the business fraternity.
+			<div class="column-content">
+			Business Goa is Goa's first and only business magazine dedicated to industry, trade
+			and commerce. Launched in July 2009 by Savoir Faire Media, the magazine has managed
+			to capture the imagination of everyone who is connected to business in Goa and beyond.
+			</div>
 		</div>
 		<div class="column left" id="column-2">
 			<div class="column-content">

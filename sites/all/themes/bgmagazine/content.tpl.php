@@ -18,7 +18,7 @@
 		</div>
 	</div>
 	<div class="col3 col3-mid left">
-		<div class="column-content">
+		<div class="column-content" style="background-color:#EEEEEE;padding:5px;">
 			<div class="post">
 				<?= $bottom_mid_region; ?>
 			</div>

@@ -8,7 +8,7 @@
   <?= $scripts ?>
 </head>
 <body id="top">
-<div id="network">
+<!--div id="network">
 	<div class="center-wrapper">
 		<div class="left">
 			<ul class="tabbed" id="network-tabs">
@@ -23,7 +23,7 @@
 		</div>
 		<div class="clearer">&nbsp;</div>
 	</div>
-</div>
+</div-->
 
 <div id="site">
 	<div class="center-wrapper">
