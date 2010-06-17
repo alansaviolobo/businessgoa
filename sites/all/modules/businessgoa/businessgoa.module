@@ -2,9 +2,13 @@
 
 function businessgoa_menu() {
 
-	$common = array ('page callback' => 'bg_section', 'page arguments' => array (1 ) );
+	$common = array ('page callback' => 'bg_section', 'page arguments' => array (0 ), 'access callback' => TRUE );
 
-	$items ['home'] = array ('page callback' => 'bg_home', 'access callback' => TRUE );
+	$items ['home'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE );
+	$items ['etc'] = array ('page callback' => 'bg_etc', 'access callback' => TRUE );
+	$items ['gallery'] = array ('page callback' => 'bg_gallery', 'access callback' => TRUE );
+	$items ['aboutus'] = array ('page callback' => 'bg_about', 'access callback' => TRUE );
+	$items ['archives'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 	$items ['Bon-Appetit'] = $common;
 	$items ['Book-Shelf'] = $common;
@@ -16,22 +20,21 @@ function businessgoa_menu() {
 	$items ['In-Focus'] = $common;
 	$items ['Interview'] = $common;
 	$items ['Legal-Eagle'] = $common;
-	$items ['Letters-To-The-Editor'] = $common;
 	$items ['Love-For-Business'] = $common;
 	$items ['Money-And-Markets'] = $common;
-	$items ['News'] = $common;
-	$items ['Newsmakers'] = $common;
+	$items ['Out-of-the-Box'] = $common;
 	$items ['Professional-Dossier'] = $common;
 	$items ['Starting-Young'] = $common;
+	$items ['Story-of-Enterprise'] = $common;
 	$items ['Thinking-Hat'] = $common;
 	$items ['Uncommon-Wealth'] = $common;
 
 	return $items;
 }
 
-function bg_get_article($section, $month = null) {
+function bg_get_article($section, $month = false) {
 	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
-	$month = (is_null ( $month ) ? time () : $month) + 60 * 60 * 24 * 30;
+	$month = ($month ? strtotime ( $month ) : time ()) + 60 * 60 * 24 * 30;
 	do {
 		$month -= 60 * 60 * 24 * 30;
 		$month_id = @current ( taxonomy_get_term_by_name ( date ( 'F Y', $month ) ) )->tid;
@@ -42,14 +45,13 @@ function bg_get_article($section, $month = null) {
 	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 );
 	$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
 	return node_load ( call_user_func ( $test_fn, $articles )->nid );
-	return ( object ) array ('teaser' => 'test' );
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 	switch ($op) {
 		case 'list' :
-			$blocks [0] ['info'] = t ( 'Editorial' );
-			$blocks [0] ['title'] = 'Editorial';
+			$blocks [0] ['info'] = t ( 'Story of Enterprise' );
+			$blocks [0] ['title'] = 'Story of Enterprise';
 			$blocks [0] ['pages'] = '<front>';
 			$blocks [0] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [0] ['region'] = 'bottom_left_region';
@@ -132,32 +134,32 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 		case 'view' :
 			switch ($delta) {
 				case 0 :
-					$content = bg_get_article ( 'Editorial' );
-					$block ['subject'] = l ( t ( 'Editorial' ), $content->path );
+					$content = bg_get_article ( 'Story of Enterprise', next ( explode ( '/', $_GET ['q'] ) ) );
+					$block ['subject'] = l ( t ( 'Story of Enterprise' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 1 :
-					$content = bg_get_article ( 'In Focus' );
+					$content = bg_get_article ( 'In Focus', next ( explode ( '/', $_GET ['q'] ) ) );
 					$block ['subject'] = l ( t ( 'In Focus' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 2 :
-					$content = bg_get_article ( 'Starting Young' );
+					$content = bg_get_article ( 'Starting Young', next ( explode ( '/', $_GET ['q'] ) ) );
 					$block ['subject'] = l ( t ( 'Starting Young' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 3 :
-					$content = bg_get_article ( 'Goan Brand' );
+					$content = bg_get_article ( 'Goan Brand', next ( explode ( '/', $_GET ['q'] ) ) );
 					$block ['subject'] = l ( t ( 'Goan Brand' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 4 :
-					$content = bg_get_article ( 'Interview' );
+					$content = bg_get_article ( 'Interview', next ( explode ( '/', $_GET ['q'] ) ) );
 					$block ['subject'] = l ( t ( 'Interview' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
 				case 5 :
-					$content = bg_get_article ( 'Bon Appetit' );
+					$content = bg_get_article ( 'Bon Appetit', next ( explode ( '/', $_GET ['q'] ) ) );
 					$block ['subject'] = l ( t ( 'Bon Appetit' ), $content->path );
 					$block ['content'] = $content->teaser . '<br>' . l ( 'Read more', $content->path );
 					break;
@@ -170,32 +172,38 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$block ['content'] = "<fb:comments width='522'></fb:comments>";
 					break;
 				case 8 :
+					$nid = next ( explode ( '/', $_GET ['q'] ) );
 					foreach ( taxonomy_get_vocabularies () as $vocab )
-						if ($vocab->name == 'Article')
+						if ($vocab->name == 'Section')
 							$vid = $vocab->vid;
-					foreach ( node_load ( next ( explode ( '/', $_GET ['q'] ) ) )->taxonomy as $term )
+					foreach ( node_load ( $nid )->taxonomy as $term )
 						if ($term->vid == $vid)
 							$tid = $term->tid;
 					$nodes = taxonomy_select_nodes ( array ($tid ) );
 					$html = null;
-					while ( $node = mysqli_fetch_object ( $nodes ) )
-						$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+					$test_fn = get_class ( $nodes ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
+					while ( $node = call_user_func ( $test_fn, $nodes ) )
+						if ($nid != $node->nid)
+							$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
 					$html = "<ul>$html</ul>";
 
 					$block ['subject'] = 'Previous Articles';
 					$block ['content'] = $html;
 					break;
 				case 9 :
+					$nid = next ( explode ( '/', $_GET ['q'] ) );
 					foreach ( taxonomy_get_vocabularies () as $vocab )
 						if ($vocab->name == 'Issue')
 							$vid = $vocab->vid;
-					foreach ( node_load ( next ( explode ( '/', $_GET ['q'] ) ) )->taxonomy as $term )
+					foreach ( node_load ( $nid )->taxonomy as $term )
 						if ($term->vid == $vid)
 							$tid = $term->tid;
 					$nodes = taxonomy_select_nodes ( array ($tid ) );
 					$html = null;
-					while ( $node = mysqli_fetch_object ( $nodes ) )
-						$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+					$test_fn = get_class ( $nodes ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
+					while ( $node = call_user_func ( $test_fn, $nodes ) )
+						if ($nid != $node->nid)
+							$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
 					$html = "<ul>$html</ul>";
 
 					$block ['subject'] = 'Other Articles';
@@ -207,16 +215,43 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 	return $op->content;
 }
 
-function bg_home() {
-	return bg_get_article ( 'Cover Story' )->teaser;
-}
-
 function bg_section($section) {
 	$section = str_replace ( '-', ' ', $section );
 	drupal_goto ( bg_get_article ( $section )->path );
 }
 
-function bg_archives($issue) {
-	$issue = strtotime ( $issue );
-	return bg_get_article ( 'Cover Story', $issue )->body;
+function bg_archives($issue = false) {
+	return bg_get_article ( 'Cover Story', $issue )->teaser;
 }
+
+function bg_archivelist() {
+	$html = null;
+	$timeline = time () - 60 * 60 * 24 * 30;
+	$filename = 'sites/default/files/cover-' . strtolower ( date ( 'F-Y', $timeline ) ) . '.jpg';
+	$alt = true;
+	while ( file_exists ( $filename ) ) {
+		$month = date ( 'F Y', $timeline );
+		if ($alt)
+			$html .= "<tr>";
+		$html .= "<td style='text-align: center;'><a href='archives/$month'><img src='$filename'></a></td>";
+		if (! $alt)
+			$html .= "</tr>";
+		$alt = ! $alt;
+		$timeline -= 60 * 60 * 24 * 30;
+		$filename = 'sites/default/files/cover-' . strtolower ( date ( 'F-Y', $timeline ) ) . '.jpg';
+	}
+	return "<table>$html</table>";
+}
+
+function bg_gallery() {
+	return "";
+}
+
+function bg_etc() {
+	return "";
+}
+
+function bg_about() {
+	return "";
+}
+
