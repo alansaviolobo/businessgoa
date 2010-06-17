@@ -10,6 +10,7 @@ function businessgoa_menu() {
 	$items ['aboutus'] = array ('page callback' => 'bg_about', 'access callback' => TRUE );
 	$items ['archives'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
+
 	$items ['Bon-Appetit'] = $common;
 	$items ['Book-Shelf'] = $common;
 	$items ['Cover-Story'] = $common;
@@ -183,8 +184,10 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$html = null;
 					$test_fn = get_class ( $nodes ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
 					while ( $node = call_user_func ( $test_fn, $nodes ) )
-						if ($nid != $node->nid)
-							$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+						if ($nid != $node->nid) {
+							$node = node_load ( $node->nid );
+							$html .= '<li>' . l ( $node->title, $node->path ) . '</li>';
+						}
 					$html = "<ul>$html</ul>";
 
 					$block ['subject'] = 'Previous Articles';
@@ -202,8 +205,10 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$html = null;
 					$test_fn = get_class ( $nodes ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
 					while ( $node = call_user_func ( $test_fn, $nodes ) )
-						if ($nid != $node->nid)
-							$html .= '<li>' . l ( $node->title, $node->nid ) . '</li>';
+						if ($nid != $node->nid) {
+							$node = node_load ( $node->nid );
+							$html .= '<li>' . l ( $node->title, $node->path ) . '</li>';
+						}
 					$html = "<ul>$html</ul>";
 
 					$block ['subject'] = 'Other Articles';
