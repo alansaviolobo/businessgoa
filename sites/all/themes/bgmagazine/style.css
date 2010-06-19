@@ -1055,6 +1055,7 @@ img.footer-web {
 }
 
 .block h2 {
+	color : red;
 	font-size: 1em;
 	font-weight: bold;
 	padding-bottom: 10px;

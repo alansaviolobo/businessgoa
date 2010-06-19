@@ -1,6 +1,6 @@
 <div class="left" id="main-left">
 	<div class="post">
-		<h2><?= $title; ?></h2>
+		<h1><?= $title; ?></h1>
 		<div><?= $tabs; ?></div>
 		<?php
 			if ($show_messages) { print $messages; }
@@ -18,7 +18,7 @@
 		</div>
 	</div>
 	<div class="col3 col3-mid left">
-		<div class="column-content" style="background-color:#EEEEEE;padding:5px;">
+		<div class="column-content">
 			<div class="post">
 				<?= $bottom_mid_region; ?>
 			</div>
