@@ -8,7 +8,8 @@ function businessgoa_menu() {
 	$items ['etc'] = array ('page callback' => 'bg_etc', 'access callback' => TRUE );
 	$items ['gallery'] = array ('page callback' => 'bg_gallery', 'access callback' => TRUE );
 	$items ['aboutus'] = array ('page callback' => 'bg_about', 'access callback' => TRUE );
-	$items ['archives'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
+	$items ['features'] = array ('page callback' => 'bg_features', 'access callback' => TRUE );
+	$items ['archivelist'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 
 	$items ['Bon-Appetit'] = $common;
@@ -34,16 +35,20 @@ function businessgoa_menu() {
 }
 
 function bg_get_article($section, $month = false) {
+	if (! $month)
+		$month = date ( 'F Y' );
+	//fix this
+	$count = 0;
+	$terms = taxonomy_get_children ( 0, 1, 'tid' );
+	usort ( $terms, create_function ( '$a, $b', 'return $b->weight - $a->weight;' ) );
+	for(; $count < count ( $terms ) and $terms[$count]->name <> $month; $count ++)
 	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
-	$month = ($month ? strtotime ( $month ) : time ()) + 60 * 60 * 24 * 30;
 	do {
-		$month -= 60 * 60 * 24 * 30;
-		$month_id = @current ( taxonomy_get_term_by_name ( date ( 'F Y', $month ) ) )->tid;
-		if (! $month_id)
-			continue;
+		$month_id = $terms [$count++]->tid;
 		$articles = taxonomy_select_nodes ( array ($section_id, $month_id ), 'and' );
 		$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_num_rows' : 'mysql_num_rows';
-	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 );
+	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 and $count < count ( $terms ) );
+
 	$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
 	return node_load ( call_user_func ( $test_fn, $articles )->nid );
 }
@@ -51,11 +56,18 @@ function bg_get_article($section, $month = false) {
 function bg_create_block($section) {
 	$content = bg_get_article ( $section, next ( explode ( '/', $_GET ['q'] ) ) );
 	$block ['subject'] = $section;
-	$block ['content'] = "<h3>" . l ( t ( $content->title ), $content->path ) . "</h3>$content->teaser<br>" . l ( 'Read more...', $content->path );
+	$block ['content'] = "<h3>" . l ( t ( $content->title ), $content->path ) . "</h3>$content->teaser<br>" . l ( 'Read more »', $content->path, array ('attributes' => array ('class' => 'more' ) ) );
 	return $block;
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
+/*update pages to <front>
+archives/*
+archivelist
+etc
+contact
+features
+gallery*/
 	switch ($op) {
 		case 'list' :
 			$blocks [0] ['info'] = t ( 'Story of Enterprise' );
@@ -156,6 +168,7 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					foreach ( taxonomy_get_vocabularies () as $vocab )
 						if ($vocab->name == 'Section')
 							$vid = $vocab->vid;
+						//taxonomy_node_get_terms
 					foreach ( node_load ( $nid )->taxonomy as $term )
 						if ($term->vid == $vid)
 							$tid = $term->tid;
@@ -205,31 +218,83 @@ function bg_section($section) {
 
 function bg_archives($issue = false) {
 	$content = bg_get_article ( 'Cover Story', $issue );
-	return "<h1>$content->title</h1>$content->teaser<br>" . l ( 'Read more...', $content->path );
+	return "<h1>$content->title</h1>$content->teaser<br>" . l ( 'Read more »', $content->path, array ('attributes' => array ('class' => 'more' ) ) );
 }
 
 function bg_archivelist() {
+	drupal_add_js ( drupal_get_path ( 'module', 'views_slideshow_imageflow' ) . '/ImageFlow_1.3.0/imageflow.js', 'module' );
+	drupal_add_css ( drupal_get_path ( 'module', 'views_slideshow_imageflow' ) . '/ImageFlow_1.3.0/imageflow.css' );
+	$terms = taxonomy_get_children ( 0, 1, 'tid' );
+	foreach ( $terms as $term )
+		$yearly_list [$term->description] [] = $term->name;
 	$html = null;
-	$timeline = time () - 60 * 60 * 24 * 30;
-	$filename = 'sites/default/files/cover-' . strtolower ( date ( 'F-Y', $timeline ) ) . '.jpg';
-	$alt = true;
-	while ( file_exists ( $filename ) ) {
-		$month = date ( 'F Y', $timeline );
-		if ($alt)
-			$html .= "<tr>";
-		$html .= "<td style='text-align: center;'><a href='archives/$month'><img src='$filename'></a></td>";
-		if (! $alt)
-			$html .= "</tr>";
-		$alt = ! $alt;
-		$timeline -= 60 * 60 * 24 * 30;
-		$filename = 'sites/default/files/cover-' . strtolower ( date ( 'F-Y', $timeline ) ) . '.jpg';
+	foreach ( $yearly_list as $year => $list ) {
+		$js = "domReady ( function () { var gallery_$year = new ImageFlow (); gallery_$year.init ({ ImageFlowID:'gallery_$year', reflections:false, captions:false, imageCursor:'pointer', slider:false, startID:3 }); } );";
+		drupal_add_js ( $js, 'inline', 'footer' );
+		$html .= "<div id='gallery_$year' class='imageflow' style='width:1000px'>";
+		foreach ( $list as $item )
+			$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' />";
+		$html .= "</div>";
 	}
-	return "<table>$html</table>";
-}
 
-function bg_gallery() {
-	return "";
+	return $html;
 }
+/*
+function bg_gallery() {
+	drupal_add_js (drupal_get_path('module', 'businessgoa').'/jquery.galleriffic.js', 'module');
+
+	$html = "<div id='controls'></div>
+			<div id='loading'></div>
+			<div id='slideshow'></div>
+			<div id='caption'></div>
+			<div id='thumbs'>
+			<ul class='thumbs noscript'>";
+	foreach(range(1, 40) as $count)
+		$html .= "<li>
+	            <a class='thumb' href='/sites/default/files/$count.jpg' title='$count'>
+	                <img src='/sites/default/files/$count.jpg' alt='$count' />
+	            </a>
+	            <div class='caption'>
+	                (Any html can go here)
+	            </div>
+	        </li>"
+	$html .= "</ul></div>";
+	return $html;
+	/*jQuery(document).ready(function($) {
+    var gallery = $('#thumbs').galleriffic({
+        delay:                     3000, // in milliseconds
+        numThumbs:                 20, // The number of thumbnails to show page
+        preloadAhead:              40, // Set to -1 to preload all images
+        enableTopPager:            false,
+        enableBottomPager:         true,
+        maxPagesToShow:            7,  // The maximum number of pages to display in either the top or bottom pager
+        imageContainerSel:         '', // The CSS selector for the element within which the main slideshow image should be rendered
+        controlsContainerSel:      '', // The CSS selector for the element within which the slideshow controls should be rendered
+        captionContainerSel:       '', // The CSS selector for the element within which the captions should be rendered
+        loadingContainerSel:       '', // The CSS selector for the element within which should be shown when an image is loading
+        renderSSControls:          true, // Specifies whether the slideshow's Play and Pause links should be rendered
+        renderNavControls:         true, // Specifies whether the slideshow's Next and Previous links should be rendered
+        playLinkText:              'Play',
+        pauseLinkText:             'Pause',
+        prevLinkText:              'Previous',
+        nextLinkText:              'Next',
+        nextPageLinkText:          'Next &rsaquo;',
+        prevPageLinkText:          '&lsaquo; Prev',
+        enableHistory:             false, // Specifies whether the url's hash and the browser's history cache should update when the current slideshow image changes
+        enableKeyboardNavigation:  true, // Specifies whether keyboard navigation is enabled
+        autoStart:                 false, // Specifies whether the slideshow should be playing or paused when the page first loads
+        syncTransitions:           false, // Specifies whether the out and in transitions occur simultaneously or distinctly
+        defaultTransitionDuration: 1000, // If using the default transitions, specifies the duration of the transitions
+        onSlideChange:             undefined, // accepts a delegate like such: function(prevIndex, nextIndex) { ... }
+        onTransitionOut:           undefined, // accepts a delegate like such: function(slide, caption, isSync, callback) { ... }
+        onTransitionIn:            undefined, // accepts a delegate like such: function(slide, caption, isSync) { ... }
+        onPageTransitionOut:       undefined, // accepts a delegate like such: function(callback) { ... }
+        onPageTransitionIn:        undefined, // accepts a delegate like such: function() { ... }
+        onImageAdded:              undefined, // accepts a delegate like such: function(imageData, $li) { ... }
+        onImageRemoved:            undefined  // accepts a delegate like such: function(imageData, $li) { ... }
+    });
+});
+}*/
 
 function bg_etc() {
 	return "";
@@ -239,3 +304,6 @@ function bg_about() {
 	return "";
 }
 
+function bg_features() {
+	return "";
+}
