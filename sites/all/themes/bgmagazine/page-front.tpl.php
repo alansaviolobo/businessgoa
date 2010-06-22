@@ -1,5 +1,4 @@
-<?php include("header_navigation.tpl.php");?>
-<div class="main" id="main-three-columns">
-<?php include("content.tpl.php");?>
-<?php include("sideblocks.tpl.php");?>
-<?php include("sidebar_footer.tpl.php");?>
+<?php
+$innertemplate['id'] = 'main-three-columns';
+$innertemplate['files'] = array('content.tpl.php', 'sideblocks.tpl.php', 'sidebar.tpl.php');
+include("outertemplate.tpl.php");
