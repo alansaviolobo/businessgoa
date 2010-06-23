@@ -41,8 +41,8 @@ function bg_get_article($section, $month = false) {
 	$count = 0;
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
 	usort ( $terms, create_function ( '$a, $b', 'return $b->weight - $a->weight;' ) );
-	for(; $count < count ( $terms ) and $terms [$count]->name != $month; $count ++)
-		$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
+	for(; $count < count ( $terms ) and $terms [$count]->name != $month; $count ++);
+	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
 	do {
 		$month_id = $terms [$count ++]->tid;
 		$articles = taxonomy_select_nodes ( array ($section_id, $month_id ), 'and' );
