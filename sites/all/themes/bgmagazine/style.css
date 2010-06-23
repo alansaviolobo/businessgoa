@@ -360,6 +360,10 @@ table.data-table tr.even td {
 	padding: 0 5px;
 }
 
+.halfwidth {
+	width: 48%;
+}
+
 .error,.notice,.success {
 	border: 1px solid #DDD;
 	margin-bottom: 1em;
