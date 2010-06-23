@@ -37,14 +37,14 @@ function businessgoa_menu() {
 function bg_get_article($section, $month = false) {
 	if (! $month)
 		$month = date ( 'F Y' );
-	//fix this
+		//fix this
 	$count = 0;
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
 	usort ( $terms, create_function ( '$a, $b', 'return $b->weight - $a->weight;' ) );
-	for(; $count < count ( $terms ) and $terms[$count]->name <> $month; $count ++)
-	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
+	for(; $count < count ( $terms ) and $terms [$count]->name != $month; $count ++)
+		$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
 	do {
-		$month_id = $terms [$count++]->tid;
+		$month_id = $terms [$count ++]->tid;
 		$articles = taxonomy_select_nodes ( array ($section_id, $month_id ), 'and' );
 		$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_num_rows' : 'mysql_num_rows';
 	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 and $count < count ( $terms ) );
@@ -61,7 +61,7 @@ function bg_create_block($section) {
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
-/*update pages to <front>
+	/*update pages to <front>
 archives/*
 archivelist
 etc
@@ -222,8 +222,6 @@ function bg_archives($issue = false) {
 }
 
 function bg_archivelist() {
-	drupal_add_js ( drupal_get_path ( 'module', 'views_slideshow_imageflow' ) . '/ImageFlow_1.3.0/imageflow.js', 'module' );
-	drupal_add_css ( drupal_get_path ( 'module', 'views_slideshow_imageflow' ) . '/ImageFlow_1.3.0/imageflow.css' );
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
 	foreach ( $terms as $term )
 		$yearly_list [$term->description] [] = $term->name;
@@ -237,64 +235,59 @@ function bg_archivelist() {
 		$html .= "</div>";
 	}
 
+	drupal_add_js ( drupal_get_path ( 'module', 'businessgoa' ) . '/ImageFlow_1.3.0/imageflow.js', 'module', 'footer' );
+	drupal_add_css ( drupal_get_path ( 'module', 'businessgoa' ) . '/ImageFlow_1.3.0/imageflow.css' );
 	return $html;
 }
-/*
-function bg_gallery() {
-	drupal_add_js (drupal_get_path('module', 'businessgoa').'/jquery.galleriffic.js', 'module');
 
-	$html = "<div id='controls'></div>
-			<div id='loading'></div>
-			<div id='slideshow'></div>
-			<div id='caption'></div>
-			<div id='thumbs'>
-			<ul class='thumbs noscript'>";
-	foreach(range(1, 40) as $count)
-		$html .= "<li>
-	            <a class='thumb' href='/sites/default/files/$count.jpg' title='$count'>
-	                <img src='/sites/default/files/$count.jpg' alt='$count' />
-	            </a>
-	            <div class='caption'>
-	                (Any html can go here)
-	            </div>
-	        </li>"
-	$html .= "</ul></div>";
-	return $html;
-	/*jQuery(document).ready(function($) {
-    var gallery = $('#thumbs').galleriffic({
-        delay:                     3000, // in milliseconds
-        numThumbs:                 20, // The number of thumbnails to show page
-        preloadAhead:              40, // Set to -1 to preload all images
-        enableTopPager:            false,
+function bg_gallery() {
+	$js = "jQuery(document).ready(function($) {
+    	var gallery = $('#thumbs').galleriffic({
+        delay:                     3000,
+        numThumbs:                 10,
+        preloadAhead:              -1,
+        enableTopPager:            true,
         enableBottomPager:         true,
-        maxPagesToShow:            7,  // The maximum number of pages to display in either the top or bottom pager
-        imageContainerSel:         '', // The CSS selector for the element within which the main slideshow image should be rendered
-        controlsContainerSel:      '', // The CSS selector for the element within which the slideshow controls should be rendered
-        captionContainerSel:       '', // The CSS selector for the element within which the captions should be rendered
-        loadingContainerSel:       '', // The CSS selector for the element within which should be shown when an image is loading
-        renderSSControls:          true, // Specifies whether the slideshow's Play and Pause links should be rendered
-        renderNavControls:         true, // Specifies whether the slideshow's Next and Previous links should be rendered
+        maxPagesToShow:            7,
+        imageContainerSel:         '#slideshow',
+        controlsContainerSel:      '#controls',
+        captionContainerSel:       '#caption',
+        loadingContainerSel:       '#loading',
+        renderSSControls:          true,
+        renderNavControls:         true,
         playLinkText:              'Play',
         pauseLinkText:             'Pause',
         prevLinkText:              'Previous',
         nextLinkText:              'Next',
         nextPageLinkText:          'Next &rsaquo;',
         prevPageLinkText:          '&lsaquo; Prev',
-        enableHistory:             false, // Specifies whether the url's hash and the browser's history cache should update when the current slideshow image changes
-        enableKeyboardNavigation:  true, // Specifies whether keyboard navigation is enabled
-        autoStart:                 false, // Specifies whether the slideshow should be playing or paused when the page first loads
-        syncTransitions:           false, // Specifies whether the out and in transitions occur simultaneously or distinctly
-        defaultTransitionDuration: 1000, // If using the default transitions, specifies the duration of the transitions
-        onSlideChange:             undefined, // accepts a delegate like such: function(prevIndex, nextIndex) { ... }
-        onTransitionOut:           undefined, // accepts a delegate like such: function(slide, caption, isSync, callback) { ... }
-        onTransitionIn:            undefined, // accepts a delegate like such: function(slide, caption, isSync) { ... }
-        onPageTransitionOut:       undefined, // accepts a delegate like such: function(callback) { ... }
-        onPageTransitionIn:        undefined, // accepts a delegate like such: function() { ... }
-        onImageAdded:              undefined, // accepts a delegate like such: function(imageData, $li) { ... }
-        onImageRemoved:            undefined  // accepts a delegate like such: function(imageData, $li) { ... }
-    });
-});
-}*/
+        enableHistory:             false,
+        enableKeyboardNavigation:  false,
+        autoStart:                 false,
+        syncTransitions:           false,
+        defaultTransitionDuration: 1000
+		});
+	});";
+
+	$html = null;
+	foreach ( range ( 1, 29 ) as $count )
+		$html .= "<li>
+	            <a class='thumb' href='/sites/default/files/magazine launch/$count.jpg' title='$count'>
+	                <img src='/sites/default/files/magazine launch/{$count}t.jpg' alt='$count' />
+	            </a><div class='caption'></div></li>";
+
+	$html = "<div id='controls'></div>
+			<div id='loading'></div>
+			<div id='slideshow'></div>
+			<div id='caption'></div>
+			<div id='thumbs'>
+				<ul class='thumbs noscript'>$html</ul>
+			</div>";
+
+	drupal_add_js ( drupal_get_path ( 'module', 'businessgoa' ) . '/jquery.galleriffic.js', 'module', 'footer' );
+	drupal_add_js ( $js, 'inline', 'footer' );
+	return $html;
+}
 
 function bg_etc() {
 	return "";
