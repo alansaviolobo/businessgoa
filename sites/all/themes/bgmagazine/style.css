@@ -699,11 +699,11 @@ img.alignright,img.right {
 	background: none;
 }
 
-#main-nav li.active a,#main-nav a:hover {
+#main-nav li.active a, #main-nav li.active-trail a, #main-nav a:hover {
 	color: #002;
 }
 
-#main-nav li.active a {
+#main-nav li.active a, #main-nav li.active-trail a {
 	background: url('images/navigation-arrow.gif') no-repeat center bottom;
 }
 
@@ -721,7 +721,7 @@ img.alignright,img.right {
 	padding: 10px;
 }
 
-#sub-nav li.active a,#sub-nav a:hover {
+#sub-nav li.active a, #sub-nav li.active-trail a, #sub-nav a:hover {
 	color: #223;
 }
 
@@ -963,19 +963,18 @@ img.alignright,img.right {
 	min-height: 0.01%;
 }
 
-.form-text {
+.form-text, .form-textarea, .form-submit {
 	margin-top: 3px;
-	height: 20px;
-	vertical-align: bottom;
+	vertical-align: middle;
 	font-size: 12px;
 	padding: 5px 0 0 10px;
 	color: gray;
 	border: 1px solid #006;
-	width: 134px;
+	width: 80%;
 }
 
-.form-submit {
-	vertical-align: bottom;
+.form-text, .form-submit {
+	height: 20px;
 }
 
 html.js fieldset.collapsible legend a {

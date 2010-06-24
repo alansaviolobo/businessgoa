@@ -12,6 +12,7 @@ function businessgoa_menu() {
 	$items ['archivelist'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 
+	$items ['BGQuiz'] = $common;
 	$items ['Bon-Appetit'] = $common;
 	$items ['Book-Shelf'] = $common;
 	$items ['Cover-Story'] = $common;
@@ -24,24 +25,25 @@ function businessgoa_menu() {
 	$items ['Legal-Eagle'] = $common;
 	$items ['Love-For-Business'] = $common;
 	$items ['Money-And-Markets'] = $common;
-	$items ['Out-of-the-Box'] = $common;
 	$items ['Professional-Dossier'] = $common;
 	$items ['Starting-Young'] = $common;
 	$items ['Story-of-Enterprise'] = $common;
 	$items ['Thinking-Hat'] = $common;
-	$items ['Uncommon-Wealth'] = $common;
+	$items ['Quizarre'] = $common;
+	$items ['Uncommonwealth'] = $common;
+	$items ['Whats-New'] = $common;
 
 	return $items;
 }
 
 function bg_get_article($section, $month = false) {
-	if (! $month)
-		$month = date ( 'F Y' );
-		//fix this
 	$count = 0;
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
 	usort ( $terms, create_function ( '$a, $b', 'return $b->weight - $a->weight;' ) );
-	for(; $count < count ( $terms ) and $terms [$count]->name != $month; $count ++);
+	if (! $month)
+		$month = $terms [0]->name;
+	for(; $count < count ( $terms ) and $terms [$count]->name != $month; $count ++)
+		;
 	$section_id = current ( taxonomy_get_term_by_name ( $section ) )->tid;
 	do {
 		$month_id = $terms [$count ++]->tid;
@@ -61,84 +63,84 @@ function bg_create_block($section) {
 }
 
 function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
-	/*update pages to <front>
-archives/*
-archivelist
-etc
-contact
-features
-gallery*/
 	switch ($op) {
 		case 'list' :
 			$blocks [0] ['info'] = t ( 'Story of Enterprise' );
-			$blocks [0] ['pages'] = '<front>';
+			$blocks [0] ['pages'] = "<front>\narchives/*\n";
 			$blocks [0] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [0] ['region'] = 'bottom_left_region';
 			$blocks [0] ['custom'] = true;
 			$blocks [0] ['status'] = true;
 
 			$blocks [1] ['info'] = t ( 'In Focus' );
-			$blocks [1] ['pages'] = '<front>';
+			$blocks [1] ['pages'] = "<front>\narchives/*\n";
 			$blocks [1] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [1] ['region'] = 'bottom_mid_region';
 			$blocks [1] ['custom'] = true;
 			$blocks [1] ['status'] = true;
 
 			$blocks [2] ['info'] = t ( 'Starting Young' );
-			$blocks [2] ['pages'] = '<front>';
+			$blocks [2] ['pages'] = "<front>\narchives/*\n";
 			$blocks [2] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [2] ['region'] = 'bottom_right_region';
 			$blocks [2] ['custom'] = true;
 			$blocks [2] ['status'] = true;
 
 			$blocks [3] ['info'] = t ( 'Goan Brand' );
-			$blocks [3] ['pages'] = '<front>';
+			$blocks [3] ['pages'] = "<front>\narchives/*\n";
 			$blocks [3] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [3] ['region'] = 'side_upper_region';
 			$blocks [3] ['custom'] = true;
 			$blocks [3] ['status'] = true;
 
 			$blocks [4] ['info'] = t ( 'Interview' );
-			$blocks [4] ['pages'] = '<front>';
+			$blocks [4] ['pages'] = "<front>\narchives/*\n";
 			$blocks [4] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [4] ['region'] = 'side_mid_region';
 			$blocks [4] ['custom'] = true;
 			$blocks [4] ['status'] = true;
 
 			$blocks [5] ['info'] = t ( 'Bon Appetit' );
-			$blocks [5] ['pages'] = '<front>';
+			$blocks [5] ['pages'] = "<front>\narchives/*\n";
 			$blocks [5] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [5] ['region'] = 'side_lower_region';
 			$blocks [5] ['custom'] = true;
 			$blocks [5] ['status'] = true;
 
 			$blocks [6] ['info'] = t ( 'Facebook Fans' );
-			$blocks [6] ['pages'] = '<front>';
+			$blocks [6] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
 			$blocks [6] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [6] ['region'] = 'side_upper_region';
 			$blocks [6] ['custom'] = true;
 			$blocks [6] ['status'] = true;
 
 			$blocks [7] ['info'] = t ( 'Facebook Comments' );
-			$blocks [7] ['pages'] = '<front>';
+			$blocks [7] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
 			$blocks [7] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [7] ['region'] = 'below_content_region';
 			$blocks [7] ['custom'] = true;
 			$blocks [7] ['status'] = true;
 
 			$blocks [8] ['info'] = t ( 'Previous Articles' );
-			$blocks [8] ['pages'] = '<front>';
+			$blocks [8] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
 			$blocks [8] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [8] ['region'] = 'side_mid_region';
 			$blocks [8] ['custom'] = false;
 			$blocks [8] ['status'] = true;
 
 			$blocks [9] ['info'] = t ( 'Other Articles' );
-			$blocks [9] ['pages'] = '<front>';
+			$blocks [9] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
 			$blocks [9] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [9] ['region'] = 'side_lower_region';
 			$blocks [9] ['custom'] = false;
 			$blocks [9] ['status'] = true;
+
+			$blocks [10] ['info'] = t ( 'Our Address' );
+			$blocks [10] ['pages'] = 'contact';
+			$blocks [10] ['cache'] = BLOCK_CACHE_PER_PAGE;
+			$blocks [10] ['region'] = 'side_upper_region';
+			$blocks [10] ['custom'] = false;
+			$blocks [10] ['status'] = true;
 
 			return $blocks;
 		case 'view' :
@@ -205,6 +207,10 @@ gallery*/
 
 					$block ['subject'] = 'Other Articles';
 					$block ['content'] = $html;
+					return $block;
+				case 10 :
+					$block ['subject'] = 'Our Address';
+					$block ['content'] = "Business Goa<br>...<br>Panaji<br>Goa<br>India<br>403001";
 					return $block;
 			}
 	}
