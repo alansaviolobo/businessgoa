@@ -1,6 +1,6 @@
 <div class="right sidebar" id="sidebar-2">
 	<div class="section">
-		<div class="section-title text-centre">
+		<div class="section-title text-center">
 			<span class="smallest">Advertisement</span>
 		</div>
 		<div class="section-content">
@@ -9,7 +9,7 @@
 	</div>
 
 	<div class="section">
-		<div class="section-title">
+		<div class="section-title text-center">
 			<span class="smallest">Advertisement</span>
 		</div>
 		<div class="section-content">
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="section network-section">
-		<div class="section-title">
+		<div class="section-title text-center">
 			<span class="smallest">Advertisement</span>
 		</div>
 		<div class="section-content">
