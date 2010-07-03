@@ -25,7 +25,7 @@
 <div id="site">
 	<div class="center-wrapper">
 		<div id="header">
-			<div class="right" id="toolbar">&nbsp;</div>
+			<!--div class="right" id="toolbar">&nbsp;</div-->
 			<div class="clearer">&nbsp;</div>
 			<div id="site-title">
 				<h1><a href="<?=base_path ();?>"><img src='<?=$logo;?>'></a></h1>
@@ -105,7 +105,7 @@
 							</a>
 						</li>
 						<li>
-							<a class="footer-links" href="contact">
+							<a class="footer-links" href="/contact">
 								<img class=footer-web src='<?= base_path() . path_to_theme() ?>/images/img_trans.gif' />Online Contact Form
 							</a>
 						</li>

@@ -142,6 +142,13 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [10] ['custom'] = false;
 			$blocks [10] ['status'] = true;
 
+			$blocks [11] ['info'] = t ( 'Meebo Widget' );
+			$blocks [11] ['pages'] = 'contact';
+			$blocks [11] ['cache'] = BLOCK_CACHE_PER_PAGE;
+			$blocks [11] ['region'] = 'side_mid_region';
+			$blocks [11] ['custom'] = false;
+			$blocks [11] ['status'] = true;
+
 			return $blocks;
 		case 'view' :
 			switch ($delta) {
@@ -159,7 +166,7 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					return bg_create_block ( 'Bon Appetit' );
 				case 6 :
 					$block ['subject'] = null;
-					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='192' stream='false' header='false'></fb:like-box>";
+					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='192' height='1000' stream='false' header='false'></fb:like-box>";
 					return $block;
 				case 7 :
 					$block ['subject'] = null;
@@ -212,6 +219,10 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$block ['subject'] = 'Our Address';
 					$block ['content'] = "Business Goa<br>101/5, Rua Thomas Rebeiro,<br>Fontainhas - Mala,<br> Panaji,<br>Goa<br>India<br>403001";
 					return $block;
+				case 11 :
+					$block ['subject'] = null;
+					$block ['content'] = "<object width=190 height=275><param name='movie' value='http://widget.meebo.com/mm.swf?GhkSbtZAoT'/><embed src='http://widget.meebo.com/mm.swf?GhkSbtZAoT' type='application/x-shockwave-flash' width=190 height=275></embed></object>";
+					return $block;
 			}
 	}
 	return $op->content;
@@ -249,10 +260,8 @@ function bg_archivelist() {
 function bg_gallery() {
 	$js = "$('#photos').galleryView({
 		gallery_width: 1000,
-
 		panel_width: 970,
 		panel_height: 800,
-
 		frame_width: 120,
 		frame_height: 120,
 		pause_on_hover: true
@@ -307,15 +316,40 @@ function bg_about() {
 }
 
 function bg_features() {
+	$le_node = bg_get_article ( 'Legal Eagle' );
+	$le_titlelink = l ( $le_node->title, $le_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$le_morelink = l ( 'Read more »', $le_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
+	$mm_node = bg_get_article ( 'Money And Markets' );
+	$mm_titlelink = l ( $mm_node->title, $mm_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$mm_morelink = l ( 'Read more »', $mm_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
+	$uc_node = bg_get_article ( 'Uncommonwealth' );
+	$uc_titlelink = l ( $uc_node->title, $uc_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$uc_morelink = l ( 'Read more »', $uc_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
+	$th_node = bg_get_article ( 'Thinking Hat' );
+	$th_titlelink = l ( $th_node->title, $th_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$th_morelink = l ( 'Read more »', $th_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
+	$lb_node = bg_get_article ( 'Love for Business' );
+	$lb_titlelink = l ( $lb_node->title, $lb_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$lb_morelink = l ( 'Read more »', $lb_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
+	$gg_node = bg_get_article ( 'Green Goa' );
+	$gg_titlelink = l ( $gg_node->title, $gg_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+	$gg_morelink = l ( 'Read more »', $gg_node->path, array ('attributes' => array ('class' => 'more' ) ) );
+
 	return "
+<div style='width:980px'>
 	<div class='left halfwidth'>
 		<fieldset>
 			<legend>Legal Eagle</legend>
 			<img class='left bordered' alt='' src='/sites/default/files/raunaq.jpg'>
-			<h3 class='section-title'><a href='#'>Land Laws of Goa</a></h3>
+			<h3 class='section-title'>$le_titlelink</h3>
 			<h5>Raunaq Rao</h5>
-			<p>A look at the various group of legislation that govern the land in Goa.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$le_node->teaser</p>
+			$le_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
@@ -324,10 +358,10 @@ function bg_features() {
 		<fieldset>
 			<legend>Money & Markets</legend>
 			<img class='right bordered' alt='' src='/sites/default/files/saravanan.jpg'>
-			<h3 class='section-title'><a href='#'>Greek lessons for the Indian economy</a></h3>
+			<h3 class='section-title'>$mm_titlelink</h3>
 			<h5>Dr. P Saravanan</h5>
-			<p>What lessons can the Greek market downfall teach us.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$mm_node->teaser</p>
+			$mm_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
@@ -338,10 +372,10 @@ function bg_features() {
 		<fieldset>
 			<legend>Uncommonwealth</legend>
 			<img class='left bordered' alt='' src='/sites/default/files/datta.jpg'>
-			<h3 class='section-title'><a href='#'>Because Eagles Dare</a></h3>
+			<h3 class='section-title'>$uc_titlelink</h3>
 			<h5>Datta D. Naik</h5>
-			<p>How businesses and career people can take a leaf out of an eagle's life. And learn.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$uc_node->teaser</p>
+			$uc_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
@@ -350,10 +384,10 @@ function bg_features() {
 		<fieldset>
 			<legend>Thinking Hat</legend>
 			<img class='right bordered' alt='' src='/sites/default/files/kailash.jpg'>
-			<h3 class='section-title'><a href='#'>House of perspectives to build a business empire</a></h3>
+			<h3 class='section-title'>$th_titlelink</h3>
 			<h5>Kailash Kattalay</h5>
-			<p>People think according to how they have learned to think.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$th_node->teaser</p>
+			$th_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
@@ -364,10 +398,10 @@ function bg_features() {
 		<fieldset>
 			<legend>Love for Business</legend>
 			<img class='left bordered' alt='' src='/sites/default/files/swapnil.jpg'>
-			<h3 class='section-title'><a href='#'>Strength + Interest = Magic</a></h3>
+			<h3 class='section-title'>$lb_titlelink</h3>
 			<h5>Swapnil Kamat</h5>
-			<p>Explore the area which interests you the most and profit from it. Sounds easy? Perhaps it really is.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$lb_node->teaser</p>
+			$lb_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
@@ -376,12 +410,12 @@ function bg_features() {
 		<fieldset>
 			<legend>Green Goa</legend>
 			<img class='right bordered' alt='' src='/sites/default/files/tallulah.jpg'>
-			<h3 class='section-title'><a href='#'>Reetha washes brightest</a></h3>
+			<h3 class='section-title'>$gg_titlelink</h3>
 			<h5>Tallulah D'Silva</h5>
-			<p>Switch to time-tested eco-friendly mode for washing your linen and clothes. Soapnut is the answer.</p>
-			<a class='more' href='#'>Read more »</a>
+			<p>$gg_node->teaser</p>
+			$gg_morelink
 			<div class='clearer'>&nbsp;</div>
 		</fieldset>
 	</div>
-";
+</div>";
 }
