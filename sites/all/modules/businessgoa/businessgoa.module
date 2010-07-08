@@ -260,7 +260,7 @@ function bg_archivelist() {
 function bg_gallery() {
 	$js = "$('#photos').galleryView({
 		gallery_width: 1000,
-		panel_width: 970,
+		panel_width: 800,
 		panel_height: 800,
 		frame_width: 120,
 		frame_height: 120,
