@@ -7,13 +7,13 @@
   <?= $scripts ?>
 </head>
 <body id="top">
-<!--div id="network">
+<div id="network">
 	<div class="center-wrapper">
 		<div class="left">
 			<ul class="tabbed" id="network-tabs">
 				<li class="current-tab"><a href="<?= base_path(); ?>">Business Goa</a></li>
+				<li><a href="http://my-goa.com">My Goa</a></li>
 				<li><a href="#">Savoir Faire</a></li>
-				<li><a href="#">My Goa</a></li>
 			</ul>
 		</div>
 		<div class="right">
@@ -21,14 +21,14 @@
 		</div>
 		<div class="clearer">&nbsp;</div>
 	</div>
-</div-->
+</div>
 <div id="site">
 	<div class="center-wrapper">
 		<div id="header">
 			<!--div class="right" id="toolbar">&nbsp;</div-->
 			<div class="clearer">&nbsp;</div>
 			<div id="site-title">
-				<h1><a href="<?=base_path ();?>"><img src='<?=$logo;?>'></a></h1>
+				<a href="<?=base_path ();?>"><img src='<?=$logo;?>'></a>
 			</div>
 			<div id="navigation">
 				<div id="main-nav">
