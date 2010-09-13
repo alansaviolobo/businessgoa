@@ -52,7 +52,10 @@ function bg_get_article($section, $month = false) {
 	} while ( is_null ( $articles ) or call_user_func ( $test_fn, $articles ) == 0 and $count < count ( $terms ) );
 
 	$test_fn = get_class ( $articles ) == 'mysqli_result' ? 'mysqli_fetch_object' : 'mysql_fetch_object';
-	return node_load ( call_user_func ( $test_fn, $articles )->nid );
+	$content = node_load ( call_user_func ( $test_fn, $articles )->nid );
+	$content->teaser = next ( module_invoke_all ( 'filter', 'prepare', 0, - 1, $content->teaser ) );
+	$content->teaser = next ( module_invoke_all ( 'filter', 'process', 0, - 1, $content->teaser ) );
+	return $content;
 }
 
 function bg_create_block($section) {
@@ -166,7 +169,13 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					return bg_create_block ( 'Bon Appetit' );
 				case 6 :
 					$block ['subject'] = null;
-					$block ['content'] = "<fb:like-box profile_id='121764281183650' width='192' height='1000' stream='false' header='false'></fb:like-box>";
+					$block ['content'] = "<fb:like-box profile_id = '121764281183650'
+															width = '192'
+														   header = 'false'
+														   height = '1000'
+														   stream = 'false'
+													  connections = '50' >
+											</fb:like-box>";
 					return $block;
 				case 7 :
 					$block ['subject'] = null;
@@ -248,7 +257,7 @@ function bg_archivelist() {
 		drupal_add_js ( $js, 'inline', 'footer' );
 		$html .= "<div id='gallery_$year' class='imageflow' style='width:1000px'>";
 		foreach ( $list as $item )
-			$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' />";
+			$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' width='100' />\n";
 		$html .= "</div>";
 	}
 
