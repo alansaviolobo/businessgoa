@@ -7,8 +7,8 @@ function businessgoa_menu() {
 	$items ['home'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE );
 	$items ['etc'] = array ('page callback' => 'bg_etc', 'access callback' => TRUE );
 	$items ['gallery'] = array ('page callback' => 'bg_gallery', 'access callback' => TRUE );
-	$items ['aboutus'] = array ('page callback' => 'bg_about', 'access callback' => TRUE );
 	$items ['features'] = array ('page callback' => 'bg_features', 'access callback' => TRUE );
+	$items ['subscribe'] = array ('page callback' => 'bg_subscribe', 'access callback' => TRUE );
 	$items ['archivelist'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 
@@ -111,42 +111,42 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [5] ['status'] = true;
 
 			$blocks [6] ['info'] = t ( 'Facebook Fans' );
-			$blocks [6] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
+			$blocks [6] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [6] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [6] ['region'] = 'side_upper_region';
 			$blocks [6] ['custom'] = true;
 			$blocks [6] ['status'] = true;
 
 			$blocks [7] ['info'] = t ( 'Facebook Comments' );
-			$blocks [7] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
+			$blocks [7] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [7] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [7] ['region'] = 'below_content_region';
 			$blocks [7] ['custom'] = true;
 			$blocks [7] ['status'] = true;
 
 			$blocks [8] ['info'] = t ( 'Previous Articles' );
-			$blocks [8] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
+			$blocks [8] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [8] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [8] ['region'] = 'side_mid_region';
 			$blocks [8] ['custom'] = false;
 			$blocks [8] ['status'] = true;
 
 			$blocks [9] ['info'] = t ( 'Other Articles' );
-			$blocks [9] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\n";
+			$blocks [9] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [9] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [9] ['region'] = 'side_lower_region';
 			$blocks [9] ['custom'] = false;
 			$blocks [9] ['status'] = true;
 
 			$blocks [10] ['info'] = t ( 'Our Address' );
-			$blocks [10] ['pages'] = 'contact';
+			$blocks [10] ['pages'] = "contact\nsubscribe\n";
 			$blocks [10] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [10] ['region'] = 'side_upper_region';
 			$blocks [10] ['custom'] = false;
 			$blocks [10] ['status'] = true;
 
 			$blocks [11] ['info'] = t ( 'Meebo Widget' );
-			$blocks [11] ['pages'] = 'contact';
+			$blocks [11] ['pages'] = "contact\nsubscribe\n";
 			$blocks [11] ['cache'] = BLOCK_CACHE_PER_PAGE;
 			$blocks [11] ['region'] = 'side_mid_region';
 			$blocks [11] ['custom'] = false;
@@ -257,7 +257,8 @@ function bg_archivelist() {
 		drupal_add_js ( $js, 'inline', 'footer' );
 		$html .= "<div id='gallery_$year' class='imageflow' style='width:1000px'>";
 		foreach ( $list as $item )
-			$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' width='100' />\n";
+			//$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' width='100' />\n";
+			$html .= taxonomy_image_display ( $item->id );
 		$html .= "</div>";
 	}
 
@@ -320,8 +321,65 @@ function bg_etc() {
 	return "";
 }
 
-function bg_about() {
-	return "";
+function bg_subscribe() {
+	return "
+		<div class='text-center'>
+			<img src='/sites/default/files/covers2.png' />
+			<div class='content-separator'></div>
+			<h3>Our subscription Rates (per copy per year)</h3>
+			<table class='data-table'>
+				<tr>
+					<th>&nbsp;</th>
+					<th class='text-center'>Within Goa</th>
+					<th class='text-center'>Maharashtra <br>& Karnataka</th>
+					<th class='text-center'>Bulk Orders</th>
+				</tr>
+				<tr class='even'>
+					<td>Stand Price</td>
+					<td class='text-center'>INR 300</td>
+					<td class='text-center'>N / A</td>
+					<td class='text-center'>N / A</td>
+				</tr>
+				<tr>
+					<td>Subscription Price</td>
+					<td class='text-center'>INR 300</td>
+					<td class='text-center'>INR 300</td>
+					<td class='text-center'>INR 250</td>
+				</tr>
+				<tr class='even'>
+					<td>Postage</td>
+					<td class='text-center'>N / A</td>
+					<td class='text-center'>INR 100</td>
+					<td class='text-center'>N / A</td>
+				</tr>
+				<tr>
+					<td>You Pay</td>
+					<td class='text-center'><strong>INR 300</strong></td>
+					<td class='text-center'><strong>INR 400</strong></td>
+					<td class='text-center'><strong>INR 250</strong></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td class='text-center'>
+						<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>
+						<input type='hidden' name='cmd' value='_s-xclick'>
+						<input type='hidden' name='hosted_button_id' value='SZKHJH6SULWMS'>
+						<input type='image' src='https://www.paypal.com/en_GB/i/btn/btn_paynow_SM.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online.'>
+						<img alt='' border='0' src='https://www.paypal.com/en_GB/i/scr/pixel.gif' width='1' height='1'>
+						</form>
+					</td>
+					<td class='text-center'>
+						<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>
+						<input type='hidden' name='cmd' value='_s-xclick'>
+						<input type='hidden' name='hosted_button_id' value='5AF39RF2S4VJ2'>
+						<input type='image' src='https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
+						<img alt='' border='0' src='https://www.paypal.com/en_GB/i/scr/pixel.gif' width='1' height='1'>
+						</form>
+					</td>
+					<td class='text-center'><a class='more' href='/contact' >Contact Us</a></td>
+				</tr>
+			</table>
+		</div> ";
 }
 
 function bg_features() {
