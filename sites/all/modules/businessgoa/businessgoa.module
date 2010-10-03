@@ -226,11 +226,16 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					return $block;
 				case 10 :
 					$block ['subject'] = 'Our Address';
-					$block ['content'] = "Business Goa<br>101/5, Rua Thomas Rebeiro,<br>Fontainhas - Mala,<br> Panaji,<br>Goa<br>India<br>403001";
+					$block ['content'] = "Business Goa<br>101/5, Rua Thomas Rebeiro,<br>
+											Fontainhas - Mala,<br> Panaji,<br>Goa<br>India<br>403001";
 					return $block;
 				case 11 :
 					$block ['subject'] = null;
-					$block ['content'] = "<object width=190 height=275><param name='movie' value='http://widget.meebo.com/mm.swf?GhkSbtZAoT'/><embed src='http://widget.meebo.com/mm.swf?GhkSbtZAoT' type='application/x-shockwave-flash' width=190 height=275></embed></object>";
+					$block ['content'] = "<object width=190 height=275>
+											<param name='movie' value='http://widget.meebo.com/mm.swf?GhkSbtZAoT'/>
+											<embed src='http://widget.meebo.com/mm.swf?GhkSbtZAoT'
+													type='application/x-shockwave-flash' width=190 height=275></embed>
+										</object>";
 					return $block;
 			}
 	}
@@ -244,22 +249,38 @@ function bg_section($section) {
 
 function bg_archives($issue = false) {
 	$content = bg_get_article ( 'Cover Story', $issue );
-	return "<h1>$content->title</h1>$content->teaser<br>" . l ( 'Read more »', $content->path, array ('attributes' => array ('class' => 'more' ) ) );
+	return "<h1>$content->title</h1>$content->teaser<br>" .
+				l ( 'Read more »', $content->path, array ('attributes' => array ('class' => 'more' ) ) );
 }
 
 function bg_archivelist() {
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
-	foreach ( $terms as $term )
-		$yearly_list [$term->description] [] = $term->name;
+	foreach ( $terms as $term ) {
+		taxonomy_image_display ( $term->tid, array ('longdesc' => "archives/$term->name" ) );
+		$volume_list [$term->description] [] = taxonomy_image_display ( $term->tid, array ('longdesc' => "archives/$term->name" ) );
+	}
+
 	$html = null;
-	foreach ( $yearly_list as $year => $list ) {
-		$js = "domReady ( function () { var gallery_$year = new ImageFlow (); gallery_$year.init ({ ImageFlowID:'gallery_$year', reflections:false, captions:false, imageCursor:'pointer', slider:false, startID:3 }); } );";
+	foreach ( $volume_list as $vol => $list ) {
+		$js = "domReady ( function () {
+					var gallery_$vol = new ImageFlow ();
+					gallery_$vol.init ({ 	ImageFlowID:'gallery_$vol',
+											captions:false,
+											circular:true,
+											imageCursor:'pointer',
+											imagesHeight:0.3,
+											reflections:false,
+											slider:true,
+											startID:3
+									});
+								}
+							);";
 		drupal_add_js ( $js, 'inline', 'footer' );
-		$html .= "<div id='gallery_$year' class='imageflow' style='width:1000px'>";
+		$html .= "<div id='gallery_$vol' class='imageflow' style='width:1000px'>\n";
 		foreach ( $list as $item )
-			//$html .= "<img src='/sites/default/files/cover-$item.jpg' longdesc='archives/$item' alt='$item' width='100' />\n";
-			$html .= taxonomy_image_display ( $item->id );
+			$html .= "$item\n";
 		$html .= "</div>";
+break;
 	}
 
 	drupal_add_js ( drupal_get_path ( 'module', 'businessgoa' ) . '/ImageFlow_1.3.0/imageflow.js', 'module', 'footer' );
@@ -332,7 +353,7 @@ function bg_subscribe() {
 					<th>&nbsp;</th>
 					<th class='text-center'>Within Goa</th>
 					<th class='text-center'>Maharashtra <br>& Karnataka</th>
-					<th class='text-center'>Bulk Orders</th>
+					<th class='text-center'>Bulk Orders <br>(more than 5)</th>
 				</tr>
 				<tr class='even'>
 					<td>Stand Price</td>
@@ -364,7 +385,7 @@ function bg_subscribe() {
 						<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>
 						<input type='hidden' name='cmd' value='_s-xclick'>
 						<input type='hidden' name='hosted_button_id' value='SZKHJH6SULWMS'>
-						<input type='image' src='https://www.paypal.com/en_GB/i/btn/btn_paynow_SM.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online.'>
+						<input type='image' src='https://www.paypal.com/en_GB/i/btn/btn_paynow_SM.gif' border='0' name='submit'>
 						<img alt='' border='0' src='https://www.paypal.com/en_GB/i/scr/pixel.gif' width='1' height='1'>
 						</form>
 					</td>
@@ -372,11 +393,18 @@ function bg_subscribe() {
 						<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>
 						<input type='hidden' name='cmd' value='_s-xclick'>
 						<input type='hidden' name='hosted_button_id' value='5AF39RF2S4VJ2'>
-						<input type='image' src='https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
+						<input type='image' src='https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif' border='0' name='submit'>
 						<img alt='' border='0' src='https://www.paypal.com/en_GB/i/scr/pixel.gif' width='1' height='1'>
 						</form>
 					</td>
-					<td class='text-center'><a class='more' href='/contact' >Contact Us</a></td>
+					<td class='text-center'>
+						<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>
+						<input type='hidden' name='cmd' value='_s-xclick'>
+						<input type='hidden' name='hosted_button_id' value='XYLUK85Q8RS8E'>
+						<input type='image' src='https://www.paypal.com/en_GB/i/btn/btn_paynow_SM.gif' border='0' name='submit'>
+						<img alt='' border='0' src='https://www.paypal.com/en_GB/i/scr/pixel.gif' width='1' height='1'>
+						</form>
+					</td>
 				</tr>
 			</table>
 		</div> ";
