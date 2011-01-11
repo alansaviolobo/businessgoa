@@ -12,8 +12,8 @@
 		<div class="left">
 			<ul class="tabbed" id="network-tabs">
 				<li class="current-tab"><a href="<?= base_path(); ?>">Business Goa</a></li>
-				<li><a href="http://my-goa.com">My Goa</a></li>
-				<li><a href="#">Savoir Faire</a></li>
+				<li><a target="_blank" href="http://insidegoa.in">Inside Goa</a></li>
+				<li><a target="_blank" href="#">Savoir Faire</a></li>
 			</ul>
 		</div>
 		<div class="right">
@@ -154,5 +154,6 @@
 		});
 	});
 </script>
+<script src="http://connect.facebook.net/en_US/all.js#appId=161056267271005&amp;xfbml=1"></script>
 </body>
 </html>

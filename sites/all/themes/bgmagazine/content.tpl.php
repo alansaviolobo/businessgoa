@@ -6,7 +6,6 @@
 			if ($show_messages) { print $messages; }
 			print $help . $content;
 		?>
-		<?= $below_content_region; ?>
 	</div>
 	<div class="clearer">&nbsp;</div>
 	<div class="content-separator"></div>
@@ -30,5 +29,10 @@
 				<?= $bottom_right_region; ?>
 			</div>
 		</div>
+	</div>
+	<div class='clear'></div>
+	<br>
+	<div>
+		<?= $below_content_region; ?>
 	</div>
 </div>

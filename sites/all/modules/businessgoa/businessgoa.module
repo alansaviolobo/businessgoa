@@ -9,7 +9,7 @@ function businessgoa_menu() {
 	$items ['gallery'] = array ('page callback' => 'bg_gallery', 'access callback' => TRUE );
 	$items ['features'] = array ('page callback' => 'bg_features', 'access callback' => TRUE );
 	$items ['subscribe'] = array ('page callback' => 'bg_subscribe', 'access callback' => TRUE );
-	$items ['archivelist'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE );
+	$items ['archivelist'] = array ('page callback' => 'bg_archivelist', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 	$items ['archives/%'] = array ('page callback' => 'bg_archives', 'access callback' => TRUE, 'page arguments' => array (1 ) );
 
 	$items ['BGQuiz'] = $common;
@@ -103,54 +103,61 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 			$blocks [4] ['custom'] = true;
 			$blocks [4] ['status'] = true;
 
-			$blocks [5] ['info'] = t ( 'Bon Appetit' );
+			$blocks [5] ['info'] = t ( 'Professional Dossier' );
 			$blocks [5] ['pages'] = "<front>\narchives/*\n";
 			$blocks [5] ['cache'] = BLOCK_CACHE_GLOBAL;
 			$blocks [5] ['region'] = 'side_lower_region';
 			$blocks [5] ['custom'] = true;
 			$blocks [5] ['status'] = true;
 
-			$blocks [6] ['info'] = t ( 'Facebook Fans' );
-			$blocks [6] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
+			$blocks [6] ['info'] = t ( 'Bon Appetit' );
+			$blocks [6] ['pages'] = "<front>\narchives/*\n";
 			$blocks [6] ['cache'] = BLOCK_CACHE_GLOBAL;
-			$blocks [6] ['region'] = 'side_upper_region';
+			$blocks [6] ['region'] = 'below_content_region';
 			$blocks [6] ['custom'] = true;
 			$blocks [6] ['status'] = true;
 
-			$blocks [7] ['info'] = t ( 'Facebook Comments' );
+			$blocks [7] ['info'] = t ( 'Facebook Fans' );
 			$blocks [7] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [7] ['cache'] = BLOCK_CACHE_GLOBAL;
-			$blocks [7] ['region'] = 'below_content_region';
+			$blocks [7] ['region'] = 'side_upper_region';
 			$blocks [7] ['custom'] = true;
 			$blocks [7] ['status'] = true;
 
-			$blocks [8] ['info'] = t ( 'Previous Articles' );
+			$blocks [8] ['info'] = t ( 'Facebook Comments' );
 			$blocks [8] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
-			$blocks [8] ['cache'] = BLOCK_CACHE_PER_PAGE;
-			$blocks [8] ['region'] = 'side_mid_region';
-			$blocks [8] ['custom'] = false;
+			$blocks [8] ['cache'] = BLOCK_CACHE_GLOBAL;
+			$blocks [8] ['region'] = 'below_content_region';
+			$blocks [8] ['custom'] = true;
 			$blocks [8] ['status'] = true;
 
-			$blocks [9] ['info'] = t ( 'Other Articles' );
+			$blocks [9] ['info'] = t ( 'Previous Articles' );
 			$blocks [9] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [9] ['cache'] = BLOCK_CACHE_PER_PAGE;
-			$blocks [9] ['region'] = 'side_lower_region';
+			$blocks [9] ['region'] = 'side_mid_region';
 			$blocks [9] ['custom'] = false;
 			$blocks [9] ['status'] = true;
 
-			$blocks [10] ['info'] = t ( 'Our Address' );
-			$blocks [10] ['pages'] = "contact\nsubscribe\n";
+			$blocks [10] ['info'] = t ( 'Other Articles' );
+			$blocks [10] ['pages'] = "<front>\narchives/*\narchivelist\netc\ncontact\nfeatures\ngallery\nsubscribe\n";
 			$blocks [10] ['cache'] = BLOCK_CACHE_PER_PAGE;
-			$blocks [10] ['region'] = 'side_upper_region';
+			$blocks [10] ['region'] = 'side_lower_region';
 			$blocks [10] ['custom'] = false;
 			$blocks [10] ['status'] = true;
 
-			$blocks [11] ['info'] = t ( 'Meebo Widget' );
+			$blocks [11] ['info'] = t ( 'Our Address' );
 			$blocks [11] ['pages'] = "contact\nsubscribe\n";
 			$blocks [11] ['cache'] = BLOCK_CACHE_PER_PAGE;
-			$blocks [11] ['region'] = 'side_mid_region';
+			$blocks [11] ['region'] = 'side_upper_region';
 			$blocks [11] ['custom'] = false;
 			$blocks [11] ['status'] = true;
+
+			$blocks [12] ['info'] = t ( 'Meebo Widget' );
+			$blocks [12] ['pages'] = "contact\nsubscribe\n";
+			$blocks [12] ['cache'] = BLOCK_CACHE_PER_PAGE;
+			$blocks [12] ['region'] = 'side_mid_region';
+			$blocks [12] ['custom'] = false;
+			$blocks [12] ['status'] = true;
 
 			return $blocks;
 		case 'view' :
@@ -166,22 +173,24 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 				case 4 :
 					return bg_create_block ( 'Interview' );
 				case 5 :
-					return bg_create_block ( 'Bon Appetit' );
+					return bg_create_block ( 'Professional Dossier' );
 				case 6 :
-					$block ['subject'] = null;
-					$block ['content'] = "<fb:like-box profile_id = '121764281183650'
-															width = '192'
-														   header = 'false'
-														   height = '1000'
-														   stream = 'false'
-													  connections = '50' >
-											</fb:like-box>";
-					return $block;
+					return bg_create_block ( 'Bon Appetit' );
 				case 7 :
 					$block ['subject'] = null;
-					$block ['content'] = "<fb:comments width='522'></fb:comments>";
+					$block ['content'] = "<fb:like-box href='http://www.facebook.com/businessgoa'
+													 width = '192'
+													header = 'false'
+													height = '1000'
+													stream = 'false'
+											   connections = '50' >
+											</fb:like-box>";
 					return $block;
 				case 8 :
+					$block ['subject'] = null;
+					$block ['content'] = "<div id='fb-root'></div><fb:comments numposts='10' width='522' publish_feed='true'></fb:comments>";
+					return $block;
+				case 9 :
 					$nid = next ( explode ( '/', $_GET ['q'] ) );
 					foreach ( taxonomy_get_vocabularies () as $vocab )
 						if ($vocab->name == 'Section')
@@ -203,7 +212,7 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$block ['subject'] = 'Previous Articles';
 					$block ['content'] = $html;
 					return $block;
-				case 9 :
+				case 10 :
 					$nid = next ( explode ( '/', $_GET ['q'] ) );
 					foreach ( taxonomy_get_vocabularies () as $vocab )
 						if ($vocab->name == 'Issue')
@@ -224,12 +233,12 @@ function businessgoa_block($op = 'list', $delta = 0, $edit = array()) {
 					$block ['subject'] = 'Other Articles';
 					$block ['content'] = $html;
 					return $block;
-				case 10 :
+				case 11 :
 					$block ['subject'] = 'Our Address';
 					$block ['content'] = "Business Goa<br>101/5, Rua Thomas Rebeiro,<br>
 											Fontainhas - Mala,<br> Panaji,<br>Goa<br>India<br>403001";
 					return $block;
-				case 11 :
+				case 12 :
 					$block ['subject'] = null;
 					$block ['content'] = "<object width=190 height=275>
 											<param name='movie' value='http://widget.meebo.com/mm.swf?GhkSbtZAoT'/>
@@ -253,7 +262,7 @@ function bg_archives($issue = false) {
 				l ( 'Read more »', $content->path, array ('attributes' => array ('class' => 'more' ) ) );
 }
 
-function bg_archivelist() {
+function bg_archivelist($volume = 1) {
 	$terms = taxonomy_get_children ( 0, 1, 'tid' );
 	foreach ( $terms as $term ) {
 		taxonomy_image_display ( $term->tid, array ('longdesc' => "archives/$term->name" ) );
@@ -280,7 +289,6 @@ function bg_archivelist() {
 		foreach ( $list as $item )
 			$html .= "$item\n";
 		$html .= "</div>";
-break;
 	}
 
 	drupal_add_js ( drupal_get_path ( 'module', 'businessgoa' ) . '/ImageFlow_1.3.0/imageflow.js', 'module', 'footer' );
